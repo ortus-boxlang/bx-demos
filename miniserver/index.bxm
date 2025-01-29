@@ -14,6 +14,6 @@
 
     <bx:dump var="#new java.lang.String( "Hola Luis and Brad and Charlie" )#">
     <bx:dump var="#variables#" expand="false"/>
-    <bx:dump var="#cgi#" expand="true" />
+    <bx:dump var="#cgi#" expand="false" />
     <bx:dump var="#server#" expand="false" />
 </bx:output>
