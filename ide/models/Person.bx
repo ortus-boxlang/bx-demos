@@ -1,0 +1,7 @@
+class{
+
+    property firstName;
+    property lastName;
+    property numeric age default=0;
+
+}

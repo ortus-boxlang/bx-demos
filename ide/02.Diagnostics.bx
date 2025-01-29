@@ -1,0 +1,11 @@
+class{
+
+    String function sayHello(){
+        return 123
+    }
+
+    Numeric function add( Numeric a, Numeric b){
+        return "hello"
+    }
+
+}

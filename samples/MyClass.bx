@@ -1,0 +1,13 @@
+@output false
+@singleton
+class {
+
+    @inject "logbox:logger:root"
+    property log;
+
+    @MyAnnotation
+    function foo() {
+        log.info("foo called");
+    }
+
+}

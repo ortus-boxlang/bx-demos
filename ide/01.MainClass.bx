@@ -1,0 +1,16 @@
+import java.time.Instant
+
+class{
+
+    function main( args ){
+        age = 10
+        age++
+
+        println( "Hello from my BoxLang class: #args[ 1 ]#, today is #getToday()#" )
+    }
+
+    private function getToday(){
+        return Instant.now();
+    }
+
+}

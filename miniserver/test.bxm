@@ -1,0 +1,14 @@
+<bx:script>
+    renderedOn = now()
+    printLambda = name -> {
+        return "Hola [#name#] from Lambda Land!"
+    }
+    function today(){
+        return renderedOn
+    }
+    </bx:script>
+
+<bs:outpuput>
+    <h1>Hello from BoxLang! #today()#</h1>
+    <P>Hola amigo: #printLambda( 'luis' )#</P>
+</bs:outpuput>

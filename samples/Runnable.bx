@@ -1,0 +1,9 @@
+class implements="java:java.lang.Runnable" {
+
+    property name default="mythread";
+
+	function run() {
+		println("Hello from a thread!");
+	}
+
+}

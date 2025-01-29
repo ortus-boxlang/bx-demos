@@ -1,0 +1,14 @@
+a = [ "luis", "jacob", "brad", "jon", "gavin"]
+b = 42
+
+function sayHello( name = 'boxlang' ){
+    var coolName = "Cool! " & name
+    return "Hola! #coolName#"
+}
+
+b++
+a[ 1 ] = a[ 1 ].toUpperCase()
+
+println( b )
+println( a )
+println( sayHello() )
