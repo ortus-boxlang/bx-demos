@@ -12,7 +12,8 @@
     <h1>Hello from BoxLang! #today()#</h1>
     <P>Hola amigo: #printLambda( 'luis' )#</P>
 
-    <bx:dump var="#createObject( "java", "java.lang.String" ).init( "Hola Luis and Brad and Charlie" )#">
-    <bx:dump var="#variables#" />
-
+    <bx:dump var="#new java.lang.String( "Hola Luis and Brad and Charlie" )#">
+    <bx:dump var="#variables#" expand="false"/>
+    <bx:dump var="#cgi#" expand="true" />
+    <bx:dump var="#server#" expand="false" />
 </bx:output>
