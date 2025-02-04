@@ -1,0 +1,51 @@
+books = queryNew(
+    "title,author,pageCount",
+    "VarChar,VarChar,Integer",
+    [
+        { title: "War and Peace", author: "Leo Tolstoy", pageCount: 1215 },
+        { title: "Green Eggs and Ham", author: "Dr. Seuss", pageCount: 62 },
+        { title: "Holes ", author: "Louis Sachar", pageCount: 233 },
+        { title: "Out of the Silent Planet", author: "C.S. Lewis", pageCount: 158 },
+        { title: "Perelandra", author: "C.S. Lewis", pageCount: 380 },
+        { title: "That Hideous Strength", author: "C.S. Lewis", pageCount: 158 },
+        { title: "Ender's Game", author: "Orson Scott Card", pageCount: 324 }
+    ]
+);
+
+spaceTrilogyPageCount = queryExecute(
+    "
+        SELECT sum(pageCount) as pageCount FROM books
+        WHERE author = ?
+    ",
+    [ "C.S. Lewis" ],
+    { dbType: "query" }
+);
+
+println( "Space Trilogy total page count: #spaceTrilogyPageCount.pageCount#" );
+
+
+println( "" );
+println( "" );
+
+
+// register a custom function and use it to manipulate a query
+
+queryRegisterFunction( "upper", ::UCase );
+
+lAuthors = queryExecute(
+    "
+        SELECT upper( title ) as title, author FROM books
+        WHERE 1=1
+    ",
+    [],
+    { dbType: "query" }
+);
+
+
+
+println( "Uppercased Book Titles" );
+
+for( book in lAuthors ){
+    println( "  #book.title# by #book.author#" );
+}
+

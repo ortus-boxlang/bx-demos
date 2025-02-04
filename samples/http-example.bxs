@@ -1,0 +1,22 @@
+
+function getWeather( required numeric latitude, required numeric longitude ){
+    var result = "";
+
+    bx:http url="https://api.open-meteo.com/v1/forecast?latitude=39.0997&longitude=-94.5786&current=temperature_2m,wind_speed_10m" result="result" {
+
+    }
+
+    return jsonDeserialize( result.fileContent );
+}
+
+coords = {
+    name: "Kansas City",
+    latitude: 39.0997,
+    longitude: -94.5786
+}
+
+kcWeather = getWeather( coords.latitude, coords.longitude );
+
+println( "The weather in #coords.name# is currently: " );
+println( "  Temperature: #kcWeather.current.temperature_2m#C" );
+println( "  Wind speed: #kcWeather.current.wind_speed_10m#km" );
