@@ -1,0 +1,36 @@
+class{
+    variables.apiURL = "https://icanhazdadjoke.com/";
+
+    /**
+     * The first argument is the term in this scenario
+     * Example: DadJoke.bx dad
+     * Example: DadJoke.bx java
+     * Example: DadJoke.bx
+     */
+    function main( args = [] ) {
+        var term = args[ 1 ] ?: "";
+
+        if( !term.isEmpty() ){
+            apiURL &= "search?term=" & urlEncodedFormat( term )
+        }
+
+        println( "Getting dad joke for term [#term#], please wait..." );
+        bx:http url=apiURL result="local.result" {
+            bx:httpparam type="header" name="Accept" value="application/json";
+        };
+
+        var data = JSONDeserialize( result.fileContent );
+        //println( data )
+
+         // possible none were found
+         if( data?.results?.len() == 0 ){
+            println( "No jokes found for term: #term#" );
+            return cliExit();
+         }
+
+        // If we searched for a term, we need to get a random joke from the results, otherwise, just .joke
+        var joke = term.isEmpty() ? data.joke : data.results[ randRange( 1, data.results.len() ) ].joke;
+        println( joke );
+    }
+
+}

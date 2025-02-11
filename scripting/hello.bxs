@@ -1,2 +1,6 @@
-println(  "Hello World! #now()#" )
-println( CLIGetArgs() );
+message = "Hola from my task! #now()#"
+println( message )
+println( "The passed args are: " )
+
+println( CLIGetArgs() )
+println( server.cli.parsed )

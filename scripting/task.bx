@@ -1,0 +1,9 @@
+class{
+
+    function main( args = [] ){
+        println( "Hola from my task! #now()#" )
+        println( "The passed args are: " )
+        println( args )
+    }
+
+}
