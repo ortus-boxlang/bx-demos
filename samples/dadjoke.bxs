@@ -1,0 +1,32 @@
+function getDadJoke(string term="") {
+
+	local.apiURL = "https://icanhazdadjoke.com/";
+	if(arguments.term !== "") apiURL &= "search?term=" & urlEncodedFormat(arguments.term);
+
+	bx:http url=apiURL result="local.result" {
+		bx:httpparam type="header" name="Accept" value="application/json";
+	};
+
+	local.data = JSONDeserialize(result.fileContent);
+	// If we searched for a term, we need to get a random joke from the results, otherwise, just .joke
+	if(arguments.term !== "") {
+		// possible none were found
+		if(data.results.len() == 0) return "No jokes found for term: #arguments.term#";
+		local.joke = data.results[randRange(1, data.results.len())].joke;
+	} else {
+		local.joke = data.joke;
+	}
+
+	return joke;
+}
+
+cliargs = cliGetArgs();
+
+term = cliargs.positionals.reduce((result,item) => {
+	if(item.listGetAt(1, "=") == "term") {
+		return item.listGetAt(2, "=");
+	}
+	return "";
+},"");
+
+writeOutput(getDadJoke(term));
