@@ -1,8 +1,8 @@
-@output false
+@output( false )
 @singleton
 class {
 
-    @inject "logbox:logger:root"
+    @inject( "logbox:logger:root" )
     property log;
 
     @MyAnnotation
