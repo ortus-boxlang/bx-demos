@@ -7,8 +7,7 @@ class{
      * Example: boxlang DadJoke.bx
      */
     function main( args = [] ) {
-        // Use elvis operator to check if a term was passed, else, use an empty string
-        var term = ( args[ 1 ] ?: "" ).trim();
+        var term = ( CLIRead( "What search term would you like to use? (Leave blank for random joke)") ).trim();
 
         if( !term.isEmpty() ){
             apiURL &= "search?term=" & term.urlEncodedFormat()
