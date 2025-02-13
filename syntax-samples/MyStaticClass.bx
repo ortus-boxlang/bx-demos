@@ -1,0 +1,29 @@
+/**
+ * This class shows how to use static constructs
+ */
+class {
+
+     // Static Constructor
+     // This runs before the pseudo-constructor
+     // You can use the `final` modifier also here to make it a constant
+     static{
+        final CLASS_NAME = "MyClass"
+        anotherStaticVar = now()
+    }
+
+    // You can also declare static variables as well
+    static multiplier = 4
+    // You can also use final here
+    static final CONSTANT = 10
+
+    function main( args = [] ){
+        static.multiplier = 5;
+        println( "Hola multiplier: #static.multiplier * static.CONSTANT#" )
+        println( "hello #static.CLASS_NAME#" )
+    }
+
+    static function calculate( required a ){
+        return static.multiplier * a;
+    };
+
+}

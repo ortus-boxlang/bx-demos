@@ -1,0 +1,8 @@
+import MyStaticClass
+
+// Call a static method
+target = new MyStaticClass()
+println( target )
+
+result = MyStaticClass::calculate( 5 )
+println( "result: #result#" )

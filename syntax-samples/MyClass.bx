@@ -1,3 +1,6 @@
+/**
+ * This class shows how to use annotations in BoxLang
+ */
 @output( false )
 @singleton
 class {
@@ -7,7 +10,7 @@ class {
 
     @MyAnnotation
     function foo() {
-        log.info("foo called");
+        log.info("foo called")
     }
 
 }
