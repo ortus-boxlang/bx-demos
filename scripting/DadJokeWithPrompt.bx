@@ -1,0 +1,33 @@
+class{
+    variables.apiURL = "https://icanhazdadjoke.com/";
+
+    /**
+     * The first argument is a term to search dad jokes on, if not provided, a random dad joke will be fetched.
+     * Example: boxlang DadJoke.bx dad
+     * Example: boxlang DadJoke.bx
+     */
+    function main( args = [] ) {
+        var term = ( CLIRead( "What search term would you like to use? (Leave blank for random joke)") ).trim();
+
+        if( !term.isEmpty() ){
+            apiURL &= "search?term=" & term.urlEncodedFormat()
+        }
+
+        println( "Getting dad joke for term [#term#], please wait..." );
+        bx:http url=apiURL result="result" {
+            bx:httpparam type="header" name="Accept" value="application/json";
+        }
+        var data = JSONDeserialize( result.fileContent );
+
+         // possible none were found, use safe navigation operator
+         if( data?.results?.len() == 0 ){
+            println( "No jokes found for term: #term#" );
+            return cliExit();
+         }
+
+        // If we searched for a term, we need to get a random joke from the results, otherwise, just .joke
+        var joke = term.isEmpty() ? data.joke : data.results[ randRange( 1, data.results.len() ) ].joke;
+        println( joke );
+    }
+
+}
