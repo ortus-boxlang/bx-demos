@@ -1,0 +1,21 @@
+
+
+<bx:module template="tags/layout.bxm" title="My Awesome BoxLang Blog">
+
+<h2>Blog Posts</h2> 
+
+<bx:query name="getRecentPosts" datasource="blog">
+select title, posted, slug from posts
+order by posted desc
+limit 10
+</bx:query>
+
+<bx:loop query="getRecentPosts">
+	<p>
+		<bx:output>
+		<a href="post.bxm/#slug#">#title#</a>
+		</bx:output>
+	</p>
+</bx:loop>
+
+</bx:module>

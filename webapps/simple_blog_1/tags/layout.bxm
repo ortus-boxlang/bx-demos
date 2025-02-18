@@ -1,0 +1,27 @@
+
+<bx:param name="attributes.title" default="">
+
+<bx:if thisTag.executionMode is "start">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="/app.css">
+	<title><bx:output>#attributes.title#</bx:output></title>
+</head>
+<body>
+
+	<h1 class="header"><a href="/">My Awesome Blog</a></h1>
+
+	<main>
+
+<bx:else>
+
+	</main>
+</body>
+</html>
+
+</bx:if>

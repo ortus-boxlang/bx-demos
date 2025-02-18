@@ -1,0 +1,17 @@
+class {
+
+	this.name = "blog1";
+
+	this.datasources = {
+		blog = {
+			driver:"mysql",
+			host:"192.168.68.50",
+			port:3306,
+			database:"blog", 
+			username:"boxlang",
+			password:server.system.environment.MYSQL_PWORD
+		}
+
+	}
+
+}
