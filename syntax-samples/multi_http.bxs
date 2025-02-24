@@ -1,0 +1,50 @@
+urls = [
+	"https://www.raymondcamden.com/feed_slim.xml",
+	"https://scottstroz.com/feed.xml",
+	"https://remotesynthesis.com/feed.xml",
+	"https://rss.slashdot.org/Slashdot/slashdotMain",
+	"https://www.themarysue.com/feed/",
+	"https://cfe.dev/rss.xml",
+	"https://recursive.codes/blog/feed",
+	"https://www.bennadel.com/rss",
+	"https://2ality.com/feeds/posts.atom",
+	"https://cassidoo.co/rss.xml",
+	"https://blackgirlbytes.dev/rss.xml"
+];
+
+public function getRSS(u) {
+	bx:http url=u result="result";
+	/*
+	lame test for entry vs item
+	*/
+	entries = xmlSearch(xmlParse(result.fileContent),"//*[name()='entry']");
+	if(entries.len() == 0) {
+		entries = xmlSearch(xmlParse(result.fileContent),"//*[name()='item']");
+	}
+	return entries;
+}
+
+aggregate = {};
+total = 0;
+start = getTickCount();
+urls.each(u => {
+	entries = getRSS(u);
+	aggregate[u] = entries;
+	total += entries.len();
+});
+duration = getTickCount() - start;
+
+println('Done aggregating #urls.len()# feeds for a total of #total# entries. This took #duration/1000# seconds.');
+
+println('-'.repeat(80));
+aggregate = {};
+total = 0;
+start = getTickCount();
+urls.each(u => {
+	entries = getRSS(u);
+	aggregate[u] = entries;
+	total += entries.len();
+}, true, 20);
+duration = getTickCount() - start;
+
+println('Done aggregating #urls.len()# feeds for a total of #total# entries. This took #duration/1000# seconds.');

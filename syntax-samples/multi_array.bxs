@@ -1,0 +1,23 @@
+input = [];
+// dummy data
+input.set(1,6,"foo");
+
+start = getTickCount();
+input.each(i => {
+	print('.');
+	sleep(1000 * 10);
+});
+println('');
+
+end = getTickCount() - start;
+println('Elapsed time: #end/1000# seconds.');
+
+start = getTickCount();
+input.each(i => {
+	print('.');
+	sleep(1000 * 10);
+},true, 20);
+println('');
+
+end = getTickCount() - start;
+println('Elapsed time: #end/1000# seconds.');
