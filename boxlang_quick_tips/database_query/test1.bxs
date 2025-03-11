@@ -1,0 +1,14 @@
+dsn = {
+	driver:"mysql",
+	host:"192.168.68.50",
+	port:3306,
+	database:"blog", 
+	username:server.system.environment.MYSQL_USERNAME,
+	password:server.system.environment.MYSQL_PWORD
+};
+
+
+posts = queryExecute("select title, posted from posts limit 10", { }, { datasource:dsn });
+for(post in posts) {
+	println('#post.title# written on #post.posted#');
+}
