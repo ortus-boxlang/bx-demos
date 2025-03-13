@@ -1,0 +1,37 @@
+
+class {
+
+	variables.rootUrl = 'your server';
+	variables.username = 'your email';
+	variables.password = 'your password';
+
+	function main(args = []) {
+
+		if(args.len() < 1) {
+			println('Pass a search term for the open issues you want to find.');
+			abort;
+		}
+
+		term = args[1];
+
+		jql = 'project=BL and status in ("In Progress", "Open", "To do") and summary ~ "#term#"';
+
+		jiraURL = '#variables.rootUrl#rest/api/latest/search/jql?jql=#urlEncodedFormat(jql)#&fields=summary,status&maxResults=1000';
+
+		bx:http url=jiraURL result="result" username=variables.username password=variables.password {
+			bx:httpparam type="header" name="Accept" value="application/json";
+		}
+
+		issueResult = jsonDeserialize(result.filecontent);
+
+		println('#issueResult.issues.len()# open issue(s) found.#char(10)#');
+
+		for(issue in issueResult.issues) {
+			println('Summary: ' & issue.fields.summary);
+			println('Status: ' & issue.fields.status.name);
+			println('Link: ' & variables.rootUrl & 'browse/' & issue.key);
+			println('');
+		}
+
+	}
+}
