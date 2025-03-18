@@ -1,0 +1,17 @@
+<bx:document filename="test2.pdf" overwrite=true localUrl=true>
+
+	<h2>Hello World</h2>
+	
+	<p>
+	This will be a PDF. Enjoy!
+	</p>
+
+	<p>
+	<img src="./cat.jpg">
+	</p>
+
+	<p>
+	Photo by <a href="https://unsplash.com/@dariasha911?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Daria Shatova</a> on <a href="https://unsplash.com/photos/white-and-brown-cat-lying-on-brown-wooden-floor-46TvM-BVrRI?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+    </p>
+
+</bx:document>

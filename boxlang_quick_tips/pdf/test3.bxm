@@ -1,0 +1,41 @@
+<bx:script>
+seed = [
+	{name:'Raymond Camden', title:'Jedi Evangelist', salary: 300000, location:'Lafayette, Louisiana'},
+	{name:'Todd Sharp', title:'Ninja Advocate', salary: 425000, location:'Atlanta, Georgia' },
+	{name:'Scott Stroz', title:'Giant Evangelist', salary: 400000, location:'West By-God Virginia' },
+	{name:'Brian Rinaldi', title:'Uberino Advocate', salary: 350000, location:'Seattle, Washington' },
+];
+</bx:script>
+
+<bx:loop array="#seed#" item="person">
+<bx:document filename="#slugify(person.name)#.pdf" overwrite=true localUrl=true>
+	<bx:output>
+	<h2>Employment Offer</h2>
+
+	<p>
+	Hello #person.name#,
+	</p>
+
+	<p>
+	We are pleased to offer you a job as #person.title# at the salary of #currencyFormat(person.salary)#.
+	</p>
+
+	<p>
+	You will work out of our #person.location# office.
+	</p>
+
+	<bx:documentitem type="pagebreak">
+
+	<p>
+	Boring legal stuff here no one will read.
+	</p>
+
+	<bx:documentitem type="footer">
+	Generated at #dateformat(now(),"short")#.
+	</bx:documentitem>
+	</bx:output>
+</bx:document>
+
+</bx:loop>
+
+Done generating PDFs.

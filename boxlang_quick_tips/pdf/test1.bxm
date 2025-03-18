@@ -1,0 +1,9 @@
+<bx:document filename="test1.pdf" overwrite=true>
+
+	<h2>Hello World</h2>
+	
+	<p>
+	This will be a PDF. Enjoy!
+	</p>
+
+</bx:document>
