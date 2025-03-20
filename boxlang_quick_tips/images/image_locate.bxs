@@ -1,0 +1,46 @@
+/*
+https://api.mapbox.com/search/geocode/v6/reverse?longitude=-91.96946111111112&latitude=30.18554722222&access_token=pk.eyJ1IjoicmF5bW9uZGNhbWRlbiIsImEiOiJjazNveHcxdnQwM2p0M2JwbnRoNDEwZmNqIn0.hXmayLfRFwaitzK7OCke_A
+*/
+
+function reverseGeoCode(lon,lat) {
+	bx:http url="https://api.mapbox.com/search/geocode/v6/reverse?longitude=#arguments.lon#&latitude=#arguments.lat#&access_token=pk.eyJ1IjoicmF5bW9uZGNhbWRlbiIsImEiOiJjazNveHcxdnQwM2p0M2JwbnRoNDEwZmNqIn0.hXmayLfRFwaitzK7OCke_A" result="res";
+	return jsonDeserialize(res.fileContent);
+}
+
+function coordinateStringToDecimal(coordinateString) {
+	search = coordinateString.refind("(\-{0,1}\d+)°\s*(\d+)'\s*([\d.]+)""", 1, true);
+
+	degrees = 0; minutes = 0; seconds = 0;
+	if(search.match.len() >= 2) degrees = abs(search.match[2]);
+	if(search.match.len() >= 3) minutes = search.match[3];
+	if(search.match.len() >= 4) seconds = search.match[4];
+
+	result = degrees + minutes/60 + seconds/3600;
+	// kind of a hack - sorry
+	if(search.match[2] < 0) result = result * -1;
+	return result;
+}
+
+images = directoryList(expandPath('./source'));
+
+images.each(i => {
+	if(isImageFile(i)) {
+		img = imageRead(i);
+		exif = img.getExifMetadata();
+		if(exif.keyExists("GPS Longitude") && exif.keyExists("GPS Latitude")) {
+
+			println(i);
+
+			//println("#exif['GPS Longitude']# #exif['GPS Longitude Ref']# -- #exif['GPS Latitude']# #exif['GPS Latitude Ref']#");
+
+			lon = coordinateStringToDecimal(exif['GPS Longitude']);
+			lat = coordinateStringToDecimal(exif['GPS Latitude']);
+			location = reverseGeoCode(lon, lat);
+			//println(location);
+			println(location.features[1].properties.place_formatted);
+			println('-'.repeat(80));
+
+		}
+
+	}
+});

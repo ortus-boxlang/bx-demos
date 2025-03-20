@@ -1,0 +1,12 @@
+images = directoryList(expandPath('./source'));
+
+images.each(i => {
+	println(i);
+	if(isImageFile(i)) {
+		img = imageRead(i);
+	//	println(imageInfo(img));
+		println(img.info());
+		
+		println('-'.repeat(80));
+	}
+});

@@ -1,0 +1,11 @@
+images = directoryList(expandPath('./source'));
+
+images.each(i => {
+	if(isImageFile(i)) {
+		println(i);
+		img = imageRead(i);
+		img.scaleToFit(250, 250);
+		img.grayscale();
+		img.write(expandPath('./thumbs/#getFileFromPath(i)#'));
+	}
+});
