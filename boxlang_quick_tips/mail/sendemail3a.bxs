@@ -1,0 +1,22 @@
+people = ["raymondcamden@gmail.com", "ray@camdenfamily.com", "rcamden@gmail.com"];
+
+people.each(person => {
+
+	content = "
+<p>
+Something interesting for #person# here...
+</p>
+	";
+
+	bx:mail
+	subject="Your Order"
+	from="myshop@ortus.com"
+	to=person
+	type="HTML"
+	server="192.168.68.50"
+	{
+
+		writeOutput(content);
+	};
+
+}, true);

@@ -1,0 +1,47 @@
+items = [
+	{"product":"cat", "price": 10.99 },
+	{"product":"another cat", "price": 11.99 },
+	{"product":"yet another cat", "price": 20.00 },
+];
+
+mailBody = "
+<h2>Hello Ray</h2>
+<p>
+Here is info about your order at #dateFormat(now(), "MM/dd/yy")#:
+</p>
+
+<table border='1' width='500'>
+	<thead>
+		<tr>
+			<th>Product</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>
+";
+
+for(item in items) {
+	mailBody &= "<tr><td>#item.product#</td><td>#currencyFormat(item.price)#</td></tr>";
+}
+
+mailBody &= "
+	</tbody>
+</table>
+
+<p>
+Thank you for your order!
+</p>
+";
+
+bx:mail
+  subject="Your Order"
+  from="myshop@ortus.com"
+  to="raymomdcamden@gmail.com"
+  bcc="orders@ortus.com"
+  type="HTML"
+  server="192.168.68.50"
+{
+
+	writeOutput(mailBody);
+};
+

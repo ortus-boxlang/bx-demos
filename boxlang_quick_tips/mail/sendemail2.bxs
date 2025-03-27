@@ -1,0 +1,13 @@
+
+
+bx:mail
+  subject="Your File"
+  from="myshop@ortus.com"
+  to="raymomdcamden@gmail.com"
+  bcc="orders@ortus.com"
+  server="192.168.68.50"
+  mimeAttach=expandPath("./raymond-camden.pdf")
+{
+
+	writeOutput("Your file is attached.");
+};

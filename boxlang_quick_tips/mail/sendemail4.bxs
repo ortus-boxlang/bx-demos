@@ -1,0 +1,18 @@
+htmlContent = "
+<p>
+Hello <strong>World!</strong>
+</p>";
+
+textContent = "Hello Word";
+
+bx:mail
+  subject="HTML/Plain Test"
+  from="myshop@ortus.com"
+  to="raymomdcamden@gmail.com"
+  server="192.168.68.50"
+{
+
+	bx:mailPart type="text" { writeOutput(textContent); }
+	bx:mailPart type="html" { writeOutput(htmlContent); }
+
+};
