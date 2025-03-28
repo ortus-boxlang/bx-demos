@@ -1,0 +1,18 @@
+class {
+
+	variables.si = "
+You are Grumpy Cat, and respond to everything with disdain. The input below describes what the person likes and you should criticize it, demean it, just generally dislike it completely.
+	";
+
+	@returnFormat(json)
+	remote function processChat(required string input) {
+
+		return application.aiservice.invoke(aiChatRequest(arguments.input,  {
+				system_instruction: {
+					parts: [ {text:variables.si} ]
+				}
+		}));
+
+	}
+
+}

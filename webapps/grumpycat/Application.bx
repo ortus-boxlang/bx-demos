@@ -1,0 +1,9 @@
+class {
+
+	this.name = "grumpycat";
+
+	public function onApplicationStart() {
+		application.aiservice = aiService("gemini").configure(server.system.environment.GEMINI_KEY);
+	}
+
+}

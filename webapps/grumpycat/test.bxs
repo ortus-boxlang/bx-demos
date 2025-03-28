@@ -1,0 +1,14 @@
+
+
+
+foo =  application.aiservice.invoke(
+			aiChatRequest('why cats?',  {
+				system_instruction: {
+					parts: [
+						{text:'You are a cat. Respond with meows'}
+					]
+				}
+			})
+		);
+
+writeoutput(foo);

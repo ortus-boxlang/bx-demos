@@ -1,0 +1,68 @@
+body {
+	background-color: grey;
+}
+
+main {
+	width: 80%;
+	min-width: 500px;
+	background-color: antiquewhite;
+	margin: auto;
+	padding: 15px;
+}
+
+input#userChat {
+	width: 500px;
+	height: 40px;
+	font-size: 2em;
+}
+
+button#sendChat {
+	height: 45px;
+	width: 75px;
+	margin-left: 10px;
+}
+
+div#userInput {
+	line-height: 2em; 
+	height: 80px;
+	display: flex;
+	align-items: center;
+	position: absolute; 
+	bottom: 0; 
+	left: 20;
+}
+
+div#chatResult {
+	font-size: 3em;
+}
+
+main {
+	min-height: 600px;
+	position: relative;
+}
+
+.rotating-image {
+  animation: sway 0.2s ease-in-out infinite; /* Apply the animation */
+  transform-origin: center bottom; /* Set the rotation point */
+}
+
+@keyframes sway {
+  0% {
+    transform: rotate(-5deg); /* Rotate slightly left */
+  }
+  50% {
+    transform: rotate(5deg); /* Rotate slightly right */
+  }
+  100% {
+    transform: rotate(-5deg); /* Return to the left */
+  }
+}
+
+footer {
+	margin-top: 25px;
+	text-align: right;
+}
+
+footer a {
+	color: black;
+}

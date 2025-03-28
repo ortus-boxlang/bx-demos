@@ -1,0 +1,30 @@
+
+<bx:param name="attributes.title" default="">
+
+<bx:if thisTag.executionMode is "start">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="/app.css">
+	<script defer src="/app.js"></script>
+	<title><bx:output>#attributes.title#</bx:output></title>
+</head>
+<body>
+
+	<main>
+
+<bx:else>
+
+	</main>
+
+	<footer>
+	<a href='https://pngtree.com/freepng/grumpy-cat-character-sticker-vector_12227230.html'>png image from pngtree.com/</a>
+	</footer>
+</body>
+</html>
+
+</bx:if>

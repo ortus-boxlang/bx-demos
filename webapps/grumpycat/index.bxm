@@ -1,0 +1,12 @@
+
+<bx:component template="tags/layout.bxm" title="Welcome to Grumpy Cat">
+
+<div id="chatResult"></div>
+
+<div id="userInput">
+<input id="userChat" type="text"> <button id="sendChat">Send</button>
+</div>
+
+</bx:component>
+
+
