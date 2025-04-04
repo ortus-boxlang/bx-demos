@@ -1,0 +1,39 @@
+class {
+
+	property name="scheduler";
+
+	function configure(){
+		scheduler.setSchedulerName( "My-Scheduler" )
+		scheduler.setTimezone( "UTC" )
+
+		scheduler.task( "Weather Task" )
+			.call( () => {
+				weather = getWeather(server.system.environment.PIRATE_KEY, 30.216667, -92.033333);
+				report = "
+Current Conditions:	#weather.currently.summary#
+Current Temperature:	#int(weather.currently.temperature)#F
+Todays Low/High: 	#int(weather.daily.data[1].temperatureLow)#F / #int(weather.daily.data[1].temperatureHigh)#F
+				";
+				println(report);
+			} )
+			.every( 1, "hour" );
+	}
+
+	/**
+	 * Called whenever ANY task fails
+	 *
+	 * @task      The task that got executed
+	 * @exception The exception object
+	 */
+	function onAnyTaskError( task, exception ){
+		println( "Task [#task.getName()#]  blew up: " & exception.getMessage() );
+	}
+
+	struct function getWeather(key,lat,long) {
+		apiURL = "https://api.pirateweather.net/forecast/#arguments.key#/#arguments.lat#,#arguments.long#";
+		bx:http url=apiURL result="result";
+		return jsonDeserialize(result.filecontent);
+	}
+}
+
+
