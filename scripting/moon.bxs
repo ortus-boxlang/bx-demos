@@ -1,0 +1,56 @@
+function getMoonPhase(date input = now()) {
+
+    LUNAR_CYCLE_DAYS = 29.530588853; // Average synodic period in days
+
+    // Reference Point: A known New Moon (e.g., January 6, 2000, 18:14 UTC)
+	referenceNewMoon = 947182440000;
+
+	timeSinceEpoch = dateConvert('local2utc',arguments.input).getTime();
+
+    // Calculate the difference in days between the input date and the reference New Moon
+	diffMilliseconds = timeSinceEpoch - referenceNewMoon;
+	diffDays = diffMilliseconds / (1000 * 60 * 60 * 24);
+
+    // Calculate the position in the current lunar cycle (0 to 1)
+    // 0 = New Moon, 0.25 = First Quarter, 0.5 = Full Moon, 0.75 = Third Quarter
+    phaseValue = (diffDays / LUNAR_CYCLE_DAYS);
+    phaseValue = phaseValue - floor(phaseValue); // Get the fractional part (position in the cycle, 0 to <1)
+	phaseValue = abs(phaseValue);
+
+  	phaseIndex = floor(phaseValue * 8 + 0.5) % 8; // Map 0-1 to 0-7 index, adding 0.5 centers the bins
+    phaseNames = [
+        "New Moon",
+        "Waxing Crescent",
+        "First Quarter",
+        "Waxing Gibbous",
+        "Full Moon",
+        "Waning Gibbous",
+        "Third Quarter", // Also known as Last Quarter
+        "Waning Crescent"
+    ];
+
+    return phaseNames[phaseIndex+1];
+   
+}
+
+// --- Example Usage ---
+
+// Get phase for today
+today = now();
+println('Phase for today #today#: #getMoonPhase(today)#');
+
+// Or simply:
+println('Phase for today: #getMoonPhase()#');
+
+//const specificDate = new Date(2024, 6, 21); // July 21, 2024 (Should be Full Moon)
+specificDate = createDate(2024, 7, 21);
+println('Phase for #specificDate#: #getMoonPhase(specificDate)#');
+
+//const anotherDate = new Date(2024, 6, 6);  // July 6, 2024 (Should be New Moon)
+anotherDate = createDate(2024,7,6);
+println('Phase for #anotherDate#: #getMoonPhase(anotherDate)#');
+
+//const firstQuarterDate = new Date(2024, 6, 13); // July 13, 2024 (Should be First Quarter)
+firstQuarterDate = createDate(2024, 7, 13);
+println('Phase for #firstQuarterDate#: #getMoonPhase(firstQuarterDate)#');
+
