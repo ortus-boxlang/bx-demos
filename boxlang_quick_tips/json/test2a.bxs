@@ -7,6 +7,5 @@ people = queryNew("name,age,rank", "varchar,integer,varchar", [
 ]);
 
 println('-'.repeat(80));
-println("Using toArrayOfStructs first:");
-x = people.toArrayOfStructs();
-println(x.toJSON());
+println("Using toArrayOfStructs:");
+println(people.toArrayOfStructs().toJSON());
