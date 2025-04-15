@@ -33,8 +33,6 @@ function getMoonPhase(date input = now()) {
    
 }
 
-// --- Example Usage ---
-
 // Get phase for today
 today = now();
 println('Phase for today #today#: #getMoonPhase(today)#');
