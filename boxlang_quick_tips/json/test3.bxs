@@ -1,0 +1,6 @@
+x = ["foo","moo","goo"];
+
+println("is x itself json? #isJson(x)#");
+
+j = x.toJSON();
+println("is j json? #isJson(j)#");

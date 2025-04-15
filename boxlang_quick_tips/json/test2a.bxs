@@ -1,0 +1,12 @@
+people = queryNew("name,age,rank", "varchar,integer,varchar", [
+	{"name":"Raymond Camden", "age": 52, "rank":"nerd"},
+	{"name":"Jacob Camden", "age": 25, "rank":"uber nerd"},
+	{"name":"Susie Smith", "age": 46, "rank":"jedi"},
+	{"name":"Carol Green", "age": 63, "rank":"samarai"},
+
+]);
+
+println('-'.repeat(80));
+println("Using toArrayOfStructs first:");
+x = people.toArrayOfStructs();
+println(x.toJSON());

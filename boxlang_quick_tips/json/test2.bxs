@@ -1,0 +1,13 @@
+people = queryNew("name,age,rank", "varchar,integer,varchar", [
+	{"name":"Raymond Camden", "age": 52, "rank":"nerd"},
+	{"name":"Jacob Camden", "age": 25, "rank":"uber nerd"},
+	{"name":"Susie Smith", "age": 46, "rank":"jedi"},
+	{"name":"Carol Green", "age": 63, "rank":"samarai"},
+
+]);
+
+println("Query to JSON with default setting:");
+println(people.toJSON("row")); // default
+println('-'.repeat(80));
+println("Query to JSON with 'column' setting:");
+println(people.toJSON("column"));

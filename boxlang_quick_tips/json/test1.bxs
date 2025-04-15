@@ -1,0 +1,21 @@
+name = "Raymond";
+age = 52;
+hobbies = ["beer","books","movies","video games","cats"]
+
+// going TO json...
+println("Testing serialization of variables:");
+println(jsonSerialize(variables));
+println('-'.repeat(80));
+println(variables.toJSON());
+
+
+println('-'.repeat(80));
+
+println("Testing deserialization of JSON:");
+// coming FROM json...
+json = variables.toJSON();
+newData = jsonDeserialize(json);
+println(newData);
+println('-'.repeat(80));
+newData = json.fromJSON();
+println(newData);

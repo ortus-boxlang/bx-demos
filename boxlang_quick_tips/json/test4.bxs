@@ -1,0 +1,7 @@
+
+name = "Raymond";
+age = 52;
+hobbies = ["beer","books","movies","video games","cats"]
+
+j = jsonSerialize(variables);
+println(jsonPrettify(j));
