@@ -1,0 +1,32 @@
+
+function markdownToHTML(str) {
+
+	// .init() is important!
+	ds = createObject("java", "com.vladsch.flexmark.util.data.MutableDataSet","flexmark-all-0.64.8-lib.jar").init();
+	ps = createObject("java", "com.vladsch.flexmark.parser.Parser","flexmark-all-0.64.8-lib.jar").builder(ds).build();
+	hm = createObject("java", "com.vladsch.flexmark.html.HtmlRenderer","flexmark-all-0.64.8-lib.jar").builder(ds).build();
+	
+	doc = ps.parse(str);
+	return hm.render(doc);
+
+}
+
+bx:savecontent variable="input" {
+```
+# Hello World
+
+Tell me why you love my [blog](https://www.raymondcamden.com).
+
+This is another paragraph. 
+
+## Stuff I like:
+
+* Books
+* Video Games
+* Music 
+* Beer 
+```
+}
+
+
+writeoutput(markdownToHTML(input));
