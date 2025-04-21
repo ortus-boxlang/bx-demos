@@ -1,0 +1,39 @@
+
+import com.vladsch.flexmark.util.data.MutableDataSet;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.html.HtmlRenderer;
+
+bx:application name="myJavaApp" javaSettings={
+  loadPaths = [ expandPath( 'flexmark-all-0.64.8-lib.jar' ) ]
+};
+
+function markdownToHTML(str) {
+
+	ds = new MutableDataSet();
+	ps = Parser.builder(ds).build();
+	hm = HtmlRenderer.builder(ds).build();	
+
+	doc = ps.parse(str);
+	return hm.render(doc);
+
+}
+
+bx:savecontent variable="input" {
+```
+# Hello World
+
+Tell me why you love my [blog](https://www.raymondcamden.com).
+
+This is another paragraph. 
+
+## Stuff I like:
+
+* Books
+* Video Games
+* Music 
+* Beer 
+```
+}
+
+
+writeoutput(markdownToHTML(input));
