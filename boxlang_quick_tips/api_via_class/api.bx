@@ -1,0 +1,18 @@
+class {
+	
+	remote array function getCats() {
+		return [
+			{ "name":"Luna", "age": 12 },
+			{ "name":"Elise", "age": 14 },
+			{ "name":"Grace", "age": 13 },
+			{ "name":"Pig", "age": 9 },
+			{ "name":"Zelda", "age": 2 },
+			{ "name":"Wednesday", "age": 1 },
+		]
+	}
+
+	remote array function searchCats(required string name) {
+		return getCats().filter(c => c.name == name);
+	}
+
+}
