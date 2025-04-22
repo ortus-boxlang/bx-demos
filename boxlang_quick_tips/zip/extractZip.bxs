@@ -1,0 +1,15 @@
+
+
+
+directory = expandPath('./destinationForZip');
+directoryCreate(path=directory, ignoreExists=true);
+
+zipFile = expandPath('./myzip.zip');
+
+if(!fileExists(zipFile) || !isZipFile(zipFile)) {
+	println("#zipFile# doesn't exist or is not a zip.");
+	abort;
+}
+
+extract(format='zip', source=zipFile, destination=directory, overwrite=true);
+println('I extracted a zip!');

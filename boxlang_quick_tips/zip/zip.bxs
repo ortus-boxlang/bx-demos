@@ -1,0 +1,6 @@
+inputZip = './myzip.zip';
+
+bx:zip action="list" file=inputZip result="zipFiles";
+
+writeDump(zipFiles);
+

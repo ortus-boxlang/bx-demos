@@ -1,0 +1,4 @@
+
+directory = expandPath('./sourceForZip');
+compress(format='zip', source=directory, destination='./myzip.zip', overwrite=true, includeBaseFolder=false);
+println('I made a zip!');
