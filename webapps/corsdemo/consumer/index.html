@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', init, false);
 async function init() {
 	let $result = document.querySelector('#result');
 
-	let catRequest = await fetch('http://localhost:8080/api.bx?method=getCats');
+	let catRequest = await fetch('http://localhost:9000/api.bx?method=getCats2');
 	let cats = await catRequest.json();
 	console.log(cats);
 
