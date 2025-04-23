@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Consumer Demo</title>
+</head>
+
+<body>
+	<h2>Cats</h2>
+	<div id="result"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', init, false);
+
+async function init() {
+	let $result = document.querySelector('#result');
+
+	let catRequest = await fetch('http://localhost:8080/api.bx?method=getCats');
+	let cats = await catRequest.json();
+	console.log(cats);
+
+	let html = '<ul>';
+	for(let cat of cats) {
+		html += `
+		<li>${cat.name} is ${cat.age} years old</li>
+		`;
+	}
+
+	$result.innerHTML = html + '</ul>';
+}
+</script>
+</body>
+</html>
