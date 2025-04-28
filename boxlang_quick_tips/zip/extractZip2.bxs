@@ -12,6 +12,6 @@ if(!fileExists(zipFile) || !isZipFile(zipFile)) {
 }
 
 extract(format='zip', source=zipFile, destination=directory, overwrite=true, 
-	filter=".*\.pdf");
+	filter="*.pdf");
 	
 println('I extracted a zip (just the PDFs)!');
