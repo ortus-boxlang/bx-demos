@@ -1,0 +1,55 @@
+/*
+This script demonstrates a wrapper around Cloudflare's Browser Rendering API. You will need
+two variables defined in your environment:
+
+CF_ACCOUNTID (Cloudflare account ID)
+CF_BR_KEY (API key with permissions for the BR API)
+
+I blogged about this (in Python) here: https://www.raymondcamden.com/2025/04/25/using-cloudflares-browser-rendering-apis-for-screenshots
+*/
+
+class {
+
+	public function main(args = []) {
+
+		CF_ACCOUNTID = server.system.environment?.CF_ACCOUNTID ?: '';
+		CF_BR_KEY = server.system.environment?.CF_BR_KEY ?: '';
+
+		if(CF_ACCOUNTID == '' OR CF_BR_KEY == '') {
+			println('Ensure CF_ACCOUNTID and CF_BR_KEY are defined in the environment.');
+			cliExit();
+		}
+
+		if(args.len() == 0) {
+			urlToScrape = cliRead('Enter the URL: ');
+		} else urlToScrape = args[1];
+
+		width = args[2] ?: 720;
+		height = args[3] ?: 1280;
+
+		println('Creating screenshot of #urlToScrape# (width: #width#, height: #height#)');
+
+		body = {
+			url: urlToScrape, 
+			viewport: {
+				width: int(width), 
+				height: int(height)
+			}
+		};
+
+		bx:http method="post" url="https://api.cloudflare.com/client/v4/accounts/#CF_ACCOUNTID#/browser-rendering/screenshot" result="result" {
+			bx:httpparam type="header" name="Authorization" value="Bearer #CF_BR_KEY#";
+			bx:httpparam type="header" name="Content-Type" value="application/json";
+			bx:httpparam type="body" value=jsonSerialize(body);
+		}
+
+		if(result.status_code == 200) {
+			filename = slugify(urlToScrape.replace('https://','')) & '.png';
+			println('Saving to #filename#');
+			fileWrite(filename, result.filecontent);
+		} else {
+			bx:dump var="#result.filecontent#";
+		}
+
+	}
+}
