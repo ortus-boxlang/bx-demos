@@ -19,6 +19,14 @@ async function sendMessage() {
 	$chatResult.innerHTML = '<p><img src="/grumpy_cat.png" class="rotating-image"></p>';
 	console.log('sending ', input);
 	let req = await fetch(`./ai.bx?method=processChat&input=${encodeURIComponent(input)}`);
+
+	if(req.status === 500) {
+		$chatResult.innerHTML = `Sorry, but something crapped the bed on the API side. Check your logs for more info, shake your fist at the demo gods, and try again.`
+		$userChat.value = '';
+		$sendChat.disabled = false;
+		return;
+	}
+
 	let result = await req.json();
 	// add the sleep here
 	await sleep(2);
