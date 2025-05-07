@@ -1,0 +1,15 @@
+class {
+
+	public function configure() {
+		println('configure');
+	}
+
+	public function onLoad() {
+		println('onLoad');
+	}
+
+	public function onUnload() {
+		println('onUnload');
+	}
+
+}

@@ -1,0 +1,6 @@
+/*
+Just a quick test script for a module
+*/
+
+msg = meow('Raymond');
+println('My custom module returned: #msg#');
