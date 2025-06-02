@@ -1,0 +1,19 @@
+<!---
+If you use variable="foo", it will store the result, not print it.
+--->
+<bx:markdown>
+
+# Hello World
+
+This is some markdown text. I'm making it <bx:output>#dateFormat(now())#</bx:output>.
+
+Here's a list, just because:
+
+* Ray
+* Lindy
+* Cats
+* Beer
+
+Finally, an image: ![https://unsplash.it/640/425?random](https://unsplash.it/640/425?random)
+
+</bx:markdown>

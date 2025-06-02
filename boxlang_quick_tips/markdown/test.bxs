@@ -1,0 +1,20 @@
+bx:savecontent variable="markdownInput" {
+```
+# Hello World
+
+This is some markdown text. It is *kinda* cool. Correction, it is **very** cool!
+
+Here's a list, just because:
+
+* Ray
+* Lindy
+* Cats
+* Beer
+
+Finally, an image: ![https://unsplash.it/640/425?random](https://unsplash.it/640/425?random)
+
+```
+}
+
+html = markdown(markdownInput);
+println(html);

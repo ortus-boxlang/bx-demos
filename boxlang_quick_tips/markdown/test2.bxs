@@ -1,0 +1,18 @@
+
+bx:savecontent variable="htmlInput" {
+```
+<h1 id="hello-world"><a href="#hello-world" id="hello-world" name="hello-world" class="anchor"></a>Hello World</h1>
+<p>This is some markdown text. It is <em>kinda</em> cool. Correction, it is <strong>very</strong> cool!</p>
+<p>Here's a list, just because:</p>
+<ul>
+<li>Ray</li>
+<li>Lindy</li>
+<li>Cats</li>
+<li>Beer</li>
+</ul>
+<p>Finally, an image: <img src="https://unsplash.it/640/425?random" alt="https://unsplash.it/640/425?random" /></p>
+```
+}
+
+md = htmlToMarkdown(htmlInput);
+println(md);
