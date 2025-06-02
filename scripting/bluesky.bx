@@ -1,0 +1,62 @@
+class {
+
+	property name="handle" type="string";
+	property name="password" type="string";
+	property name="token" type="string";
+
+	public function login() {
+
+		checkAuth();
+
+		body = {
+			identifier: variables.handle,
+			password: variables.password
+		};
+
+		bx:http url="https://bsky.social/xrpc/com.atproto.server.createSession" method="post" result="result" {
+			bx:httpparam type="header" name="Content-Type" value="application/json";
+			bx:httpparam type="body" value="#body.toJSON()#";
+		}
+
+		if(result.statusCode != 200) {
+			throw("Authentication credentials were not valid.");
+		}
+
+		auth = result.fileContent.fromJSON();
+
+		variables.token = auth.accessJwt;
+		return true;
+
+	}
+
+	public function post(msg) {
+		checkAuth();
+
+		body = {
+			repo:"raymondcamden.com", 
+			collection:"app.bsky.feed.post", 
+			record: {
+				text:msg,
+				createdAt: dateTimeFormat(now(), "iso")
+
+			}
+		};
+
+		bx:http url="https://bsky.social/xrpc/com.atproto.repo.createRecord" method="post" result="result" {
+			bx:httpparam type="header" name="Authorization" value="Bearer #variables.token#";
+			bx:httpparam type="header" name="Content-Type" value="application/json";
+			bx:httpparam type="body" value="#body.toJSON()#";
+		}
+
+		return result.fileContent;
+	}
+
+	/*
+	* Utility function to ensure auth is set. In the future, I'm going to allow this to refresh tokens.
+	*/
+	private function checkAuth() {
+		if(variables.handle == "" || variables.password == "") {
+			throw("Component initialized with blank, or missing, handle and password values.");
+		}
+	}
+}

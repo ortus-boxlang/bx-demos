@@ -1,0 +1,44 @@
+BS_HANDLE = server.system.environment?.BLUESKY_HANDLE ?: '';
+BS_PASSWORD = server.system.environment?.BLUESKY_PASSWORD ?: '';
+
+if(BS_HANDLE == "" || BS_PASSWORD == "") {
+	println('Ensure both Bluesky env vars are set: BLUESKY_HANDLE and BLUESKY_PASSWORD');
+	abort;
+}
+
+body = {
+	identifier: BS_HANDLE,
+	password: BS_PASSWORD
+};
+
+bx:http url="https://bsky.social/xrpc/com.atproto.server.createSession" method="post" result="result" {
+	bx:httpparam type="header" name="Content-Type" value="application/json";
+	bx:httpparam type="body" value="#body.toJSON()#";
+}
+
+if(result.statusCode != 200) {
+	println("Invalid login, here is what was returned:");
+	writeDump(result.content);
+	abort;
+}
+
+auth = result.fileContent.fromJSON();
+// Auth contains info about the user, but we care about auth.accessJwt
+
+body = {
+	repo:"raymondcamden.com", 
+	collection:"app.bsky.feed.post", 
+	record: {
+		text:"Test via API - sorry for the noise!",
+		createdAt: dateTimeFormat(now(), "iso")
+
+	}
+};
+
+bx:http url="https://bsky.social/xrpc/com.atproto.repo.createRecord" method="post" result="result" {
+	bx:httpparam type="header" name="Authorization" value="Bearer #auth.accessJwt#";
+	bx:httpparam type="header" name="Content-Type" value="application/json";
+	bx:httpparam type="body" value="#body.toJSON()#";
+}
+
+writeDump(result);
