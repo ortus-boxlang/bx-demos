@@ -29,7 +29,12 @@ class {
 
 	}
 
-	public function post(msg) {
+	/*
+	To use an image (soon to be an array), you must pass a structure that contains:
+	.src=binary data of the image
+	.alt=alt text. Technically alt text isn't required by the API, but you *should* use it
+	*/
+	public function post(required string msg, struct image) {
 		checkAuth();
 
 		body = {
@@ -37,10 +42,33 @@ class {
 			collection:"app.bsky.feed.post", 
 			record: {
 				text:msg,
-				createdAt: dateTimeFormat(now(), "iso")
-
+				createdAt: now().format("iso")
 			}
 		};
+
+		if(arguments.keyExists("image")) {
+			if(!arguments.image.keyExists("src") || !arguments.image.keyExists("alt")) {
+				throw("When passing an image to post, you must include src and alt values.");
+			}
+
+			bx:http url="https://bsky.social/xrpc/com.atproto.repo.uploadBlob" method="post" result="result" {
+				bx:httpparam type="header" name="Authorization" value="Bearer #variables.token#";
+				bx:httpparam type="header" name="Content-Type" value="image/jpeg";
+				bx:httpparam type="body" value="#image.src#";
+			}
+
+			fileResult = result.fileContent.fromJSON();
+
+			body.record.embed = {
+				"$type": "app.bsky.embed.images",
+				images: [
+					{
+						alt:image.alt,
+						image: fileResult.blob
+					}
+				]
+			}
+		}
 
 		bx:http url="https://bsky.social/xrpc/com.atproto.repo.createRecord" method="post" result="result" {
 			bx:httpparam type="header" name="Authorization" value="Bearer #variables.token#";

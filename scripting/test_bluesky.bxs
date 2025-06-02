@@ -42,3 +42,40 @@ bx:http url="https://bsky.social/xrpc/com.atproto.repo.createRecord" method="pos
 }
 
 writeDump(result);
+
+
+imgTest = expandPath("./cat1.jpg");
+bx:http url="https://bsky.social/xrpc/com.atproto.repo.uploadBlob" method="post" result="result" {
+	bx:httpparam type="header" name="Authorization" value="Bearer #auth.accessJwt#";
+	bx:httpparam type="header" name="Content-Type" value="image/jpeg";
+	bx:httpparam type="body" value="#fileReadBinary(imgTest)#";
+}
+
+fileResult = result.fileContent.fromJSON();
+writedump(fileResult);
+
+body = {
+	repo:"raymondcamden.com", 
+	collection:"app.bsky.feed.post", 
+	record: {
+		text:"Test via API - now with an image (for real).",
+		embed: {
+			"$type": "app.bsky.embed.images",
+			images: [
+			{
+				alt:'',
+				image: fileResult.blob
+			}
+			],
+		},
+		createdAt: dateTimeFormat(now(), "iso")
+	}
+};
+
+bx:http url="https://bsky.social/xrpc/com.atproto.repo.createRecord" method="post" result="result" {
+	bx:httpparam type="header" name="Authorization" value="Bearer #auth.accessJwt#";
+	bx:httpparam type="header" name="Content-Type" value="application/json";
+	bx:httpparam type="body" value="#body.toJSON()#";
+}
+
+writeDump(result.filecontent);

@@ -4,6 +4,13 @@ BS_PASSWORD = server.system.environment?.BLUESKY_PASSWORD ?: '';
 bs = new bluesky(handle=BS_HANDLE, password=BS_PASSWORD);
 bs.login();
 
-post = bs.post("Hello from the API, promise this is the last(ish) test.");
+//post = bs.post("Hello from the API, promise this is the last(ish) test.");
+//dump(post);
+
+// now with an image test
+
+post = bs.post("Honest, this should be the last test. Really.", { src:fileReadBinary(expandPath("./cat1.jpg")), alt:"Photo of a kitten" });
+
 dump(post);
+
 println('done');
