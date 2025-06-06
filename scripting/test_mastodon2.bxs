@@ -1,0 +1,19 @@
+MASTO_TOKEN = server.system.environment?.MASTO_TOKEN ?: '';
+MASTO_SERVER = server.system.environment?.MASTO_SERVER ?: '';
+
+if(MASTO_TOKEN == "" || MASTO_SERVER == "") {
+	println('Ensure the Mastodon token env vars are set: MASTO_TOKEN and MASTO_SERVER');
+	abort;
+}
+
+
+masto = new mastodon(token=MASTO_TOKEN, server=MASTO_SERVER);
+
+post = masto.post("Hello from the API, promise this is the last(ish) test.");
+dump(post);
+
+// now with an image test
+post = masto.post("Honest, this should be the last test. Really.",expandPath('./cat1.jpg'));
+dump(post);
+
+println('done');

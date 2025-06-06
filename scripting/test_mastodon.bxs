@@ -1,0 +1,35 @@
+MASTO_TOKEN = server.system.environment?.MASTO_TOKEN ?: '';
+MASTO_SERVER = server.system.environment?.MASTO_SERVER ?: '';
+
+if(MASTO_TOKEN == "" || MASTO_SERVER == "") {
+	println('Ensure the Mastodon token env vars are set: MASTO_TOKEN and MASTO_SERVER');
+	abort;
+}
+
+
+toot = 'Hello World from BoxLang, #now()#';
+
+bx:http url='https://#MASTO_SERVER#/api/v1/statuses' method='post' result='result' {
+    bx:httpparam type='header' name='Authorization' value='Bearer #MASTO_TOKEN#';
+    bx:httpparam type='formfield' name='status' value=toot;
+}
+
+dump(result.fileContent);
+
+// test with media
+
+bx:http url='https://#MASTO_SERVER#/api/v2/media' method='post' result='result' {
+    bx:httpparam type='header' name='Authorization' value='Bearer #MASTO_TOKEN#';
+    bx:httpparam type='file' name='file' file=expandPath('./cat1.jpg');
+}
+
+mediaOb = result.filecontent.fromJSON();
+toot = 'Hello World from BoxLang, #now()#, with an image.';
+
+bx:http url='https://#MASTO_SERVER#/api/v1/statuses' method='post' result='result' {
+    bx:httpparam type='header' name='Authorization' value='Bearer #MASTO_TOKEN#';
+    bx:httpparam type='formfield' name='status' value=toot;
+	bx:httpparam type='formfield' name='media_ids[]' value=mediaOb.id;
+}
+
+dump(result.fileContent.fromJSON());

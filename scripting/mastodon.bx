@@ -1,0 +1,42 @@
+class {
+
+	property name="token" type="string";
+	property name="server" type="string";
+
+	public function uploadMedia(required string path) {
+		checkAuth();
+
+		bx:http url='https://#variables.server#/api/v2/media' method='post' result='result' {
+			bx:httpparam type='header' name='Authorization' value='Bearer #variables.token#';
+			bx:httpparam type='file' name='file' file=path;
+		}
+
+		return result.fileContent.fromJSON();
+
+	}
+
+	public function post(required string toot, image="") {
+		checkAuth();
+
+		bx:http url='https://#variables.server#/api/v1/statuses' method='post' result='result' {			
+			bx:httpparam type='header' name='Authorization' value='Bearer #variables.token#';
+			bx:httpparam type='formfield' name='status' value=toot;
+			if(image !== '') {
+				imageOb = uploadMedia(image);
+				bx:httpparam type='formfield' name='media_ids[]' value=imageOb.id;
+			}
+		}
+
+		return result.fileContent.fromJSON();
+
+	}
+
+	/*
+	* Utility function to ensure auth is set. 
+	*/
+	private function checkAuth() {
+		if(variables.token == "" || variables.server == "") {
+			throw("Component initialized with blank, or missing, handle and password values.");
+		}
+	}
+}
