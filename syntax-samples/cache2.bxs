@@ -1,0 +1,16 @@
+myCache = cache();
+
+lastTime = myCache.getOrSet("lastTime", () => return now(),5);
+
+myCache.get("lastTime").ifPresent(thisTime => {
+	printLn(thisTime);
+});
+
+sleep(7 * 1000);
+
+writeDump(myCache.getKeys());
+
+test = myCache.get("lastTime").ifPresent(x => {
+	println('yes it is present, #x#');
+});
+

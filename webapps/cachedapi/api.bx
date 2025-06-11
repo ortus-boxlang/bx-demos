@@ -1,0 +1,33 @@
+class {
+
+	variables.CACHE_TIME = 30 * 60; // 30 minutes
+
+	remote struct function getForecast() {
+
+		bx:http url="https://api.open-meteo.com/v1/forecast?latitude=30.216&longitude=-98.555&current=temperature_2m,wind_speed_10m" result="result" {
+
+		}
+
+		return jsonDeserialize( result.fileContent );
+
+	}
+
+	remote struct function getForecastWithCache() {
+
+		myCache = cache();
+
+		result = myCache.getOrSet("forecast", () => {
+			println('getting weather from API');
+
+			bx:http url="https://api.open-meteo.com/v1/forecast?latitude=30.216&longitude=-98.555&current=temperature_2m,wind_speed_10m" result="result" {
+
+			}
+
+			return jsonDeserialize( result.fileContent );
+		}, variables.CACHE_TIME);
+
+		return result;
+
+	}
+
+}

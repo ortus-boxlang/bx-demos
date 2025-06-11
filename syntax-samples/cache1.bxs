@@ -1,0 +1,16 @@
+myCache = cache();
+writeDump(myCache);
+
+
+lastTime = myCache.getOrSet("lastTime", () => return now());
+
+
+myCache.get("lastTime").ifPresent(thisTime => {
+	printLn(thisTime);
+});
+
+// another option
+lastTimeFromCache = myCache.get("lastTime").orElse(now());
+println("lasTimeFromCache: #lastTimeFromCache#");
+
+writeDump(myCache.getKeys());

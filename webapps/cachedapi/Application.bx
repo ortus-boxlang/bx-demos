@@ -1,0 +1,3 @@
+class {
+	this.name="cache_demo";
+}

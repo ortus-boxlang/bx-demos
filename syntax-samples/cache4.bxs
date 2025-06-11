@@ -1,0 +1,36 @@
+COUNT = 35;
+
+function fibonacci(k) {
+	if(k < 2) return k;
+	return fibonacci(k-1) + fibonacci(k-2);
+}
+
+now = getTickCount();
+res = fibonacci(COUNT);
+dur = getTickCount() - now;
+println('Total time: #dur#ms');
+
+myCache = cache();
+function fibonacci2(k) {
+	cached = myCache.get(k);
+	if(cached.isPresent()) {
+		//println('returning cached');
+		return cached.get();
+	}
+
+	if(k < 2) {
+		result = 1;
+	} else {
+		result = fibonacci2(k-1) + fibonacci2(k-2);
+	}
+	//println('caching #k#');
+	myCache.set(k, result);
+	return result;
+}
+
+now = getTickCount();
+res = fibonacci2(COUNT);
+dur = getTickCount() - now;
+println('Total time for Cached version: #dur#ms');
+
+
