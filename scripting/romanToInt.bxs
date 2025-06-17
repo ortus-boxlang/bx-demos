@@ -1,0 +1,75 @@
+/**
+ * Converts a Roman numeral string to an integer.
+ *
+ * @param {string} s The Roman numeral string.
+ * @returns {number} The integer equivalent of the Roman numeral.
+ */
+function romanToInt(s) {
+
+  romanMap = {
+    'I': 1,
+    'V': 5,
+    'X': 10,
+    'L': 50,
+    'C': 100,
+    'D': 500,
+    'M': 1000
+  };
+
+  total = 0;
+  upperCaseS = s.toUpperCase();
+
+  // 2. Iterate through the string from left to right.
+  for (i = 1; i <= upperCaseS.len(); i++) {
+
+    if(!romanMap.keyExists(upperCaseS[i])) {
+      throw("Invalid Roman numeral character: #upperCaseS[i]#");
+    } else if(i < upperCaseS.len() && !romanMap.keyExists(upperCaseS[i+1])) {
+      throw("Invalid Roman numeral character: #upperCaseS[i+1]#");
+    }
+
+    currentVal = romanMap[upperCaseS[i]];
+    nextVal = i < upperCases.len() ? romanMap[upperCaseS[i+1]] : null;
+
+    if (nextVal > currentVal) {
+      // Subtract the current value from the total.
+      total -= currentVal;
+    } else {
+      // Otherwise, it's an additive case. Add the current value.
+      total += currentVal;
+    }
+  }
+
+  return total;
+}
+
+// --- Examples ---
+
+// Basic cases
+println("III -> #romanToInt('III')#");       // Expected output: 3
+println("LVIII -> #romanToInt('LVIII')#");   // Expected output: 58 (L=50, V=5, III=3)
+
+// Subtractive cases
+println("IV -> #romanToInt('IV')#");         // Expected output: 4
+println("IX -> #romanToInt('IX')#");         // Expected output: 9
+
+// MCMXCVII is a cool-looking number.
+println("MCMXCVII -> #romanToInt('MCMXCVII')#"); // Expected output: 1997
+
+// Case-insensitivity example
+println("mcmxciv -> #romanToInt('mcmxciv')#"); // Expected output: 1994
+
+
+// Invalid character examples
+try {
+	println("XXA -> #romanToInt('A')#"); 
+} catch(e) {
+	println("Handled exception: #e.message#");
+}
+
+try {
+	println("XXA -> #romanToInt('XXA')#"); 
+} catch(e) {
+	println("Handled exception: #e.message#");
+}
+

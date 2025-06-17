@@ -1,0 +1,70 @@
+/**
+ * Converts a Roman numeral string to an integer.
+ *
+ * @param {string} s The Roman numeral string.
+ * @returns {number} The integer equivalent of the Roman numeral.
+ */
+function romanToInt(s) {
+
+  romanMap = {
+    'I': 1,
+    'V': 5,
+    'X': 10,
+    'L': 50,
+    'C': 100,
+    'D': 500,
+    'M': 1000
+  };
+
+  total = 0;
+  upperCaseS = s.toUpperCase();
+
+  // 2. Iterate through the string from left to right.
+  for (i = 1; i <= upperCaseS.len(); i++) {
+
+    if(!romanMap.keyExists(upperCaseS[i])) {
+      throw("Invalid Roman numeral character: #upperCaseS[i]#");
+    } else if(i < upperCaseS.len() && !romanMap.keyExists(upperCaseS[i+1])) {
+      throw("Invalid Roman numeral character: #upperCaseS[i+1]#");
+    }
+
+    currentVal = romanMap[upperCaseS[i]];
+    nextVal = i < upperCases.len() ? romanMap[upperCaseS[i+1]] : null;
+
+    if (nextVal > currentVal) {
+      // Subtract the current value from the total.
+      total -= currentVal;
+    } else {
+      // Otherwise, it's an additive case. Add the current value.
+      total += currentVal;
+    }
+  }
+
+  return total;
+}
+
+function sortMonarchs(arr) {
+  return arr.sort((a, b) => {
+    if(a === b) return 0;
+    // split into names if necessary
+    parts = a.listToArray(" "); 
+    alpha.roman = romanToInt(parts.last());
+    alpha.name = parts.slice(1, parts.len())[1];
+    parts = b.listToArray(" "); 
+    beta.roman = romanToInt(parts.last());
+    beta.name = parts.slice(1, parts.len())[1];
+
+    if(alpha.name < beta.name) return -1;
+    if(alpha.name > beta.name) return 1;
+    if(alpha.name === beta.name) {
+      return alpha.roman - beta.roman;
+    }
+    return 1;
+  });
+}
+
+println( sortMonarchs(["Louis IX", "Louis VIII", "Philip II", "Philip I"]));
+// should be:  ["Louis VIII", "Louis IX", "Philip I", "Philip II"]
+
+println(sortMonarchs(["George VI", "George V", "Elizabeth II", "Edward VIII"]));
+// should be: ["Edward VIII", "Elizabeth II", "George V", "George VI"]
