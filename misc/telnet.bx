@@ -1,0 +1,60 @@
+// Credit Brad Wood and ChatGTP
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+
+class {
+    function main( array args ) {
+		if( args.isEmpty() || !isNumeric( args[1] ) ) {
+			args[1] = 23;
+		}
+		port = args[1];
+        theServerSocket = new ServerSocket( port );
+        println( "Telnet server listening on port #port#" );
+
+        try {
+            while ( true ) {
+                thesocket = theServerSocket.accept();
+				println( "Accepted connection from #thesocket.getInetAddress().toString()#:#thesocket.getPort()#" );
+                thread name="client-#createUUID()#" thesocket=thesocket {
+                    handleClient( thesocket );
+                }
+            }
+        } catch ( any e ) {
+			println( e.message );
+           theServerSocket.close();
+        }
+    }
+
+    function handleClient( Socket thesocket ) {
+        try {
+			println( "creating reader/writer" );
+            reader = new BufferedReader( new InputStreamReader( thesocket.getInputStream() ) );
+            writer = new PrintWriter( thesocket.getOutputStream(), true );
+
+            writer.println( "Welcome to BoxLang Telnet!" );
+            writer.println( "Type 'exit' to quit." );
+			writer.flush();
+
+			println( "welcome flushed" );
+            while ( true ) {
+                line = reader.readLine();
+                if ( isNull( line ) || line.trim() == "exit" ) {
+                    writer.println( "Goodbye!" );
+                    break;
+                }
+                writer.println( "Echo: #line#" );
+				writer.flush();
+            }
+        } catch ( any e ) {
+            println( "Error: #e.message#" );
+        } finally {
+            println( "closing connection" );
+			reader.close();
+			writer.close();
+            thesocket.close();
+        }
+    }
+}
