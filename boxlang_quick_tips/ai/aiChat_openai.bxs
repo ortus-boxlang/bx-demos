@@ -1,0 +1,10 @@
+
+answer = aiChat(
+	messages="why are cats better than dogs?", 
+	options={
+		provider:"openai", 
+		apiKey:server.system.environment.OPENAI_API_KEY
+	}
+);
+
+println(answer);

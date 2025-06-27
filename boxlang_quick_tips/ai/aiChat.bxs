@@ -1,0 +1,10 @@
+
+answer = aiChat(
+	messages="why are cats better than dogs?", 
+	options={
+		provider:"gemini", 
+		apiKey:server.system.environment.GEMINI_API_KEY
+	}
+);
+
+println(answer);

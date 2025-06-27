@@ -1,0 +1,19 @@
+
+
+aiService = aiService("gemini").configure(server.system.environment.GEMINI_API_KEY);
+
+answer = aiService.invoke(aiChatRequest("honestly, why ARE cats so awesome???"));
+println(answer);
+
+println('-'.repeat(80));
+
+// more complex - 
+
+answer2 =  aiservice.invoke(aiChatRequest(
+[
+	{ "role":"system", "content":"You are a teacher for adults with some scientific knowledge." },
+	{ "role":"user", "content":"Where do stars come from?"}
+
+]
+));
+println(answer2);

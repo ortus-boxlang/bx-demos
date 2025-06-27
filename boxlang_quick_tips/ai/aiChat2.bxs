@@ -1,0 +1,29 @@
+
+
+answer = aiChat(
+	messages=[
+		{ "role":"system", "content":"You are a teacher for young children." },
+		{ "role":"user", "content":"Where do stars come from?"}
+	], 
+	options={
+		provider:"gemini", 
+		apiKey:server.system.environment.GEMINI_API_KEY
+	}
+);
+
+println(answer);
+
+println('-'.repeat(80));
+
+answer = aiChat(
+	messages=[
+		{ "role":"system", "content":"You are a teacher for adults with some scientific knowledge." },
+		{ "role":"user", "content":"Where do stars come from?"}
+	], 
+	options={
+		provider:"gemini", 
+		apiKey:server.system.environment.GEMINI_API_KEY
+	}
+);
+
+println(answer);
