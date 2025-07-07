@@ -1,0 +1,64 @@
+<bx:script>
+today = now();
+
+firstOfThisMonth = today.withDayOfMonth(1);
+
+// used for labelling the calendar
+thisMonth = today.format("MMMM yyyy");
+</bx:script>
+
+<style>
+.calendar-wrapper {
+  max-width: 280px;
+  font: 100% system-ui;
+}
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.first-day {
+  <bx:output>
+  grid-column-start: #firstOfThisMonth.dayofWeek()#;
+  </bx:output>
+}
+
+.day-name {
+  background: #eee;
+}
+
+h1 {
+  text-align: center;
+}
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+li {
+  padding: 2px;
+}
+</style>
+
+<bx:output>
+<div class="calendar-wrapper">
+  <h1>#thisMonth#</h1>
+  <ol class="calendar">
+    
+    <li class="day-name">Sun</li>
+    <li class="day-name">Mon</li>
+    <li class="day-name">Tue</li>
+    <li class="day-name">Wed</li>
+    <li class="day-name">Thu</li>
+    <li class="day-name">Fri</li>
+    <li class="day-name">Sat</li>
+    
+    <li class="first-day">1</li>
+    <bx:loop index="x" from="2" to="#today.daysInMonth()#">
+      <li>#x#</li>
+    </bx:loop>
+  </ol>
+</div>
+</bx:output>

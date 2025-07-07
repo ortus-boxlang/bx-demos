@@ -1,0 +1,74 @@
+/* 
+I generate a set of events that are not random, but associated around the current date. This way
+you can play with the demo and see static results, but it's always useful in the future.
+*/
+
+events = [];
+
+// so, 3 events last month, 4 events this month, 3 events next months
+today = now();
+
+// 3 events for last month
+lastMonth = today.add('m',-1);
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: lastMonth.withDayOfMonth(1).withHour(9).withMinute(0).withSecond(0),
+	eventEnd: lastMonth.withDayOfMonth(1).withHour(10).withMinute(0).withSecond(0),
+});
+
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: lastMonth.withDayOfMonth(13).withHour(12).withMinute(0).withSecond(0),
+	eventEnd: lastMonth.withDayOfMonth(13).withHour(14).withMinute(0).withSecond(0),
+});
+
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: lastMonth.withDayOfMonth(20).withHour(9).withMinute(0).withSecond(0),
+	eventEnd: lastMonth.withDayOfMonth(20).withHour(12).withMinute(0).withSecond(0),
+});
+
+// 4 for this month
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: today.withDayOfMonth(8).withHour(13).withMinute(0).withSecond(0),
+	eventEnd: today.withDayOfMonth(8).withHour(15).withMinute(0).withSecond(0),
+});
+
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: lastMonth.withDayOfMonth(16).withHour(10).withMinute(0).withSecond(0),
+	eventEnd: lastMonth.withDayOfMonth(16).withHour(12).withMinute(0).withSecond(0),
+});
+
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: lastMonth.withDayOfMonth(18).withHour(6).withMinute(0).withSecond(0),
+	eventEnd: lastMonth.withDayOfMonth(18).withHour(8).withMinute(0).withSecond(0),
+});
+
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: lastMonth.withDayOfMonth(28).withHour(14).withMinute(0).withSecond(0),
+	eventEnd: lastMonth.withDayOfMonth(28).withHour(16).withMinute(0).withSecond(0),
+});
+
+// 3 for next month
+nextMonth = today.add('m',1);
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: nextMonth.withDayOfMonth(2).withHour(9).withMinute(0).withSecond(0),
+	eventEnd: nextMonth.withDayOfMonth(2).withHour(10).withMinute(0).withSecond(0),
+});
+
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: nextMonth.withDayOfMonth(15).withHour(12).withMinute(0).withSecond(0),
+	eventEnd: nextMonth.withDayOfMonth(15).withHour(14).withMinute(0).withSecond(0),
+});
+
+events.push({
+	title:'Event #events.len()+1#',
+	eventStart: nextMonth.withDayOfMonth(22).withHour(9).withMinute(0).withSecond(0),
+	eventEnd: nextMonth.withDayOfMonth(22).withHour(12).withMinute(0).withSecond(0),
+});
