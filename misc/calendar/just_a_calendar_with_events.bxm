@@ -1,0 +1,138 @@
+<bx:script>
+today = now();
+// for testing
+//today = today.add('m',-1);
+
+firstOfThisMonth = today.withDayOfMonth(1);
+
+// used for labelling the calendar
+thisMonth = today.format("MMMM yyyy");
+
+// used in case we need to render Prev/Next months
+lastMonth = today.add('m',-1);
+daysInLastMonth = lastMonth.daysInMonth();
+
+// used to know when the month begins
+thisFirstDow = firstOfThisMonth.dayofWeek();
+lastDayDow = createDate(today.year(), today.month(), today.daysInMonth()).dayofWeek();
+
+eventProvider = new events();
+events = eventProvider.getEvents();
+
+function getEventsForDay(dt, events) {
+	return events.filter(e => {
+		return dt.dayOfYear() === e.eventStart.dayOfYear() && dt.year() === e.eventStart.year();
+	});
+}
+</bx:script>
+
+<style>
+table {
+	border-collapse: collapse;
+	border: 1px solid black;
+	width: 100%;
+	height: 700px;
+}
+
+th, td {
+	border: 1px solid black;
+	padding: 5px; 
+}
+
+td {
+	vertical-align: top;
+}
+
+td.previousMonthDay, td.nextMonthDay {
+	background-color: #c0c0c0;
+}
+
+.dayLabel {
+	text-align: center;
+	vertical-align: top;
+	margin: 0;
+	padding-bottom: 10px;
+}
+
+div.calendarHeader {
+	text-align: center;
+	font-weight: bold;
+	font-size: 2em;
+	margin-bottom: 5px;
+
+}
+
+</style>
+
+<bx:output>
+<div class="calendarHeader">#thisMonth#</div>
+<table class="calendar" border="1">
+	<thead>
+		<tr>
+			<th>Sunday</th>
+			<th>Monday</th>
+			<th>Tuesday</th>
+			<th>Wednesday</th>
+			<th>Thursday</th>
+			<th>Friday</th>
+			<th>Saturday</th>
+		</tr>
+	</thead>
+	<tbody>
+			<tr>
+			<!--- First row of the month is special.... --->
+			<!--- loop from 1 (Sunday) to first day of week of the month --->
+			<bx:if thisFirstDow gte 2>
+				<bx:loop index="x" from="1" to="#thisFirstDow-1#">
+						<td class="previousMonthDay"><p class="dayLabel">#daysInLastMonth-thisFirstDow+x+1#</p></td>
+				</bx:loop>
+			</bx:if>
+			<bx:loop index="x" from="#thisFirstDow#" to="7">
+				<bx:set todaysEvents = getEventsForDay(createDate(today.year(), today.month(), x), events)>
+				<td>
+				<p class="dayLabel">#x-thisFirstDow+1#</p>
+				<bx:if todaysEvents>
+					<p>
+					<bx:loop index="e" array="#todaysEvents#">
+						#e.title#, #dateTimeFormat(e.eventStart,"h:mm a")#-#dateTimeFormat(e.eventEnd,"h:mm a")#
+					</bx:loop>
+					</p>
+				</bx:if>
+				</td>
+				<bx:set lastDay = x-thisFirstDow+1>
+			</bx:loop>
+			</tr>
+
+			<!--- now we loop from the end of the first week to the EOM --->
+			<bx:loop index="x" from="#lastDay+1#" to="#today.daysInMonth()#">
+				<!--- if dow(x)is 1, it's a new row --->
+				<bx:set thisDay = createDate(today.year(), today.month(), x)>
+				<bx:if thisDay.dayOfWeek() == 1>
+					<tr>
+				</bx:if>
+
+				<bx:set todaysEvents = getEventsForDay(thisDay, events)>
+				<td>
+				<p class="daylabel">#x#</p>
+				<bx:if todaysEvents>
+					<bx:loop index="e" array="#todaysEvents#">
+						#e.title#, #dateTimeFormat(e.eventStart,"h:mm a")#-#dateTimeFormat(e.eventEnd,"h:mm a")#
+					</bx:loop>
+				</bx:if>
+				</td>
+
+				<bx:if thisDay.dayOfWeek() == 7>
+					</tr>
+				</bx:if>
+			</bx:loop>
+
+			<!--- do we have 'trailing' days? --->
+			<bx:if lastDayDow lt 7>
+				<bx:loop index="x" from="#lastDayDow+1#" to="7">
+					<td class="nextMonthDay"><p class="dayLabel">#x-lastDayDow#</p></td>
+				</bx:loop>
+				</tr>
+			</bx:if>
+	</tbody>
+</table>
+</bx:output>
