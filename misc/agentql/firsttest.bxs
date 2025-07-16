@@ -1,0 +1,33 @@
+
+if(!server.system.environment.keyExists('AGENTQL_API_KEY')) {
+	println('Set the AGENTQL_API_KEY value in your environment please.');
+	abort;
+}
+
+AGENTQL_API_KEY = server.system.environment.AGENTQL_API_KEY;
+
+blog = 'https://www.raymondcamden.com';
+
+// The AgentQL query of the data to be extracted
+query = "
+{
+  blogposts[] {
+    url
+    title
+	date
+  }
+}
+";
+
+body = {
+	query: query,
+	url:blog
+}
+
+bx:http url="https://api.agentql.com/v1/query-data" method="post" result="result" {
+	bx:httpparam type="header" name="X-API-Key" value="#AGENTQL_API_KEY#";
+	bx:httpparam type="header" name="Content-Type" value="application/json";
+	bx:httpparam type="body" value="#body.toJSON()#";
+}
+
+writedump(result.fileContent.fromJSON());

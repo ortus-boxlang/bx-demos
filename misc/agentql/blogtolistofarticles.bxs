@@ -1,0 +1,73 @@
+
+if(!server.system.environment.keyExists('AGENTQL_API_KEY')) {
+	println('Set the AGENTQL_API_KEY value in your environment please.');
+	abort;
+}
+
+AGENTQL_API_KEY = server.system.environment.AGENTQL_API_KEY;
+
+function agentQL(key, url, query) {
+
+	body = {
+		query: query,
+		url:blog
+	}
+
+	bx:http url="https://api.agentql.com/v1/query-data" method="post" result="result" {
+		bx:httpparam type="header" name="X-API-Key" value="#key#";
+		bx:httpparam type="header" name="Content-Type" value="application/json";
+		bx:httpparam type="body" value="#body.toJSON()#";
+	}
+
+	return result.fileContent.fromJSON();
+}
+
+blog = 'https://www.raymondcamden.com';
+
+// The AgentQL query of the data to be extracted
+query = "
+{
+  blogposts[] {
+    url
+    title
+	date
+  }
+}
+";
+
+
+// First, get our blog posts
+data = agentQL(AGENTQL_API_KEY, blog, query).data.blogposts;
+
+/* 
+	I used this when I wanted to skip hitting the API and work on my formatting and such. Normally
+	I'd remove it, but I thought it was a good reminder about using mock data to save on API calls
+
+data = [ {
+  url : "https://www.raymondcamden.com/2025/07/02/parsing-csv-in-boxlang-maven-style",
+  title : "Parsing CSV in BoxLang - Maven Style",
+  date : "July 2, 2025"
+}, {
+  url : "https://www.raymondcamden.com/2025/07/01/take-foxits-new-pdf-apis-for-a-spin",
+  title : "Take Foxit's New PDF APIs for a Spin",
+ date : "July 2, 2025"
+}];
+*/
+
+println("Fetched #data.len()# posts, now converting to Markdown");
+
+bx:saveContent variable="md" {
+```
+# Blog Posts from <bx:output>#blog#</bx:output>
+
+<bx:loop index="b" array="#data#">
+* <bx:output>[#b.title#](#b.url#) (Posted #b.date#)</bx:output>
+</bx:loop>
+```
+};
+
+html = markdown(md);
+
+// Email this - or just save it...
+fileWrite('blog.html', html);
+println('Done and saved to blog.html');
