@@ -1,0 +1,14 @@
+class {
+
+	public function getSales() {
+		thisYear = year(now());
+		return [
+			{month:"January", year:thisYear, sales: 100 },
+			{month:"February", year:thisYear, sales: 92 },
+			{month:"March", year:thisYear, sales: 103 },
+			{month:"April", year:thisYear, sales: 143 },
+			{month:"May", year:thisYear, sales: 167 },
+			{month:"June", year:thisYear, sales: 201 },
+		]
+	}
+}

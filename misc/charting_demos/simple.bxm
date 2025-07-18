@@ -1,0 +1,62 @@
+<bx:script>
+rawdata = new datasource().getSales();
+labels = rawdata.map(d => return d.month);
+sales = rawdata.map(d => return d.sales);
+</bx:script>
+
+<html>
+<head>
+<title>Chart Demo One</title>
+<style>
+#chartDiv {
+	width: 600px;
+	height: 500px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="chartDiv">
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('myChart');
+
+/*
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+*/
+<bx:output>
+new Chart(ctx, {
+	type:'bar', 
+	data: {
+		labels: #labels.toJSON()#,
+		datasets: [{
+			label:'## of Sales',
+			data:#sales.toJSON()#
+		}]
+	}
+});
+</bx:output>
+</script>
+</body>
+</html>
