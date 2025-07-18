@@ -1,6 +1,6 @@
 class {
 
-	public function getSales() {
+	remote function getSales() {
 		thisYear = year(now());
 		return [
 			{month:"January", year:thisYear, sales: 100 },
