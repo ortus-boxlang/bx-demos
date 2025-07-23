@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Chart Demo One</title>
+<style>
+#chartDiv {
+	width: 600px;
+	height: 500px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="chartDiv">
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', init, false);
+
+async function init() {
+	let rawdata = await (await fetch('./datasource.bx?method=getSales')).json();
+
+	let labels = rawdata.map(d => d.month);
+	let sales = rawdata.map(d => d.sales);
+
+	const ctx = document.getElementById('myChart');
+
+	new Chart(ctx, {
+		type:'bar', 
+		data: {
+			labels: labels,
+			datasets: [{
+				label:'## of Sales',
+				data:sales
+			}]
+		}
+	});
+}
+</script>
+</body>
+</html>
