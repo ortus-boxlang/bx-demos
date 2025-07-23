@@ -1,0 +1,94 @@
+<bx:script>
+cookbooks = application.recipeService.getCookbooks();
+
+bx:param name="form.name" default="";
+bx:param name="form.time" default="";
+bx:param name="form.sourceurl" default="";
+bx:param name="form.cookbook" default="";
+bx:param name="form.newcookbook" default="";
+bx:param name="form.notes" default="";
+bx:param name="form.steps" default="";
+bx:param name="form.ingredients" default="";
+
+if(form.keyExists('save')) {
+	// we are saving so we need to validate
+}
+</bx:script>
+
+<bx:component template="tags/layout.bxm" title="Recipe Edit">
+
+	<h2>Recipe Edit</h2>
+
+	<form method="post">
+		<bx:output>
+		<p>
+		<label for="name">
+		Name: 
+		</label>
+		<input type="text" id="name" name="name" required value="#form.name#">
+		</p>
+
+		<p>
+		<label for="time">
+		Total Time: 
+		</label>
+		<input type="number" id="time" name="time" required value="#form.time#">
+		</p>
+
+		<p>
+		<label for="sourceurl">
+		Source URL: 
+		</label>
+		<input type="url" id="sourceurl" name="sourceurl" value="#form.sourceurl#">
+		</p>
+		</bx:output>
+
+		<p>
+		<label for="cookbook">
+		Cookbook: 
+		</label>
+		<select id="cookbook" name="cookbook">
+			<bx:output query="cookbooks">
+				<option value=""></option>
+				<option value="#id#">#name#</option>
+			</bx:output>
+		</select>
+		<bx:output>
+		<input type="text" id="newcookbook" name="newcookbook" placeholder="New Cookbook" value="#form.newcookbook#">
+
+		</p>
+
+		<p>
+		<label for="ingredients">
+		Ingredients (NUMBER UNITOFMEASUREMENT ITEM): 
+		</label>
+		<textarea id="ingredients" name="ingredients" required>#form.ingredients#</textarea>
+		</p>
+
+		<p>
+		<label for="steps">
+		Step (EMPTY LINE BETWEEN STEPS): 
+		</label>
+		<textarea id="steps" name="steps" required>#form.steps#</textarea>
+		</p>
+
+		<p>
+		<label for="notes">
+		Notes: 
+		</label>
+		<textarea id="notes" name="notes">#form.notes#</textarea>
+		</p>
+		</bx:output>
+
+		<p>
+		<input type="submit" name="save" value="Save Recipe">
+		</p>
+	</form>
+
+<!---
+ingredients
+steps
+notes
+--->
+
+</bx:component>

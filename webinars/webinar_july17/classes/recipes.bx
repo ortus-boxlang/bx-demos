@@ -1,0 +1,7 @@
+class {
+
+	public function getCookbooks() {
+		return queryExecute("select * from cookbooks order by name");
+	}
+
+}

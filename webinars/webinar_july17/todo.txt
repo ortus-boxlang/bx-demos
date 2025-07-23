@@ -1,0 +1,9 @@
+do error checking 
+save recipe - dont forget handling new cookbook
+recipe view
+recipe edit -> reuse, support loading existing value
+
+UI 
+AI awesome URL-> clean recipe
+
+user management

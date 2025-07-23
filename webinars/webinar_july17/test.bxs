@@ -1,0 +1,12 @@
+datasource = {
+		driver:"mysql",
+		host:server.system.environment.MYSQL_HOST,
+		port:server.system.environment.MYSQL_PORT,
+		database:"recipes", 
+		username:server.system.environment.MYSQL_USERNAME,
+		password:server.system.environment.MYSQL_PWORD
+}; 
+
+//q = queryExecute("select * from recipes", {}, {datasource:datasource});
+q = queryExecute("select * from recipes");
+writedump(q);

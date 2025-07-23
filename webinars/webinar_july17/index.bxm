@@ -1,0 +1,20 @@
+<bx:script>
+cookbooks = application.recipeService.getCookbooks();
+</bx:script>
+
+<bx:component template="tags/layout.bxm" title="My Recipe Site">
+
+	<h2>Cookbooks</h2>
+
+	<bx:if cookbooks.recordCount gte 1>
+		show them here, ill do this later i promise 
+	<bx:else>
+		No cookbooks - get to cooking!
+	</bx:if>
+
+	<p>
+	<a href="recipe_edit.bxm">Add Recipe</a>
+	</p>
+
+</bx:component>
+
