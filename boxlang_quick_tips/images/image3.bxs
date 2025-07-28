@@ -1,0 +1,10 @@
+images = directoryList(expandPath('./source'));
+
+images.each(i => {
+	if(isImageFile(i)) {
+		println(i);
+		img = imageRead(i);
+        img.drawText('Copyright © #year(now())#', 10, 10);
+		img.write(expandPath('./wm/#getFileFromPath(i)#'));
+	}
+});
