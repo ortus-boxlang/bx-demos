@@ -6,7 +6,10 @@ images.each(i => {
 		img = imageRead(i);
 	//	println(imageInfo(img));
 		println(img.info());
-		
+		/*
+		if all you care about is the size, you can use:
+		img.getWidth() and img.getHeight()
+		*/
 		println('-'.repeat(80));
 	}
 });
