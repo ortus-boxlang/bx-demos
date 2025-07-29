@@ -4,7 +4,8 @@ images.each(i => {
 	if(isImageFile(i)) {
 		println(i);
 		img = imageRead(i);
-        img.drawText('Copyright © #year(now())#', 10, 10);
+		img.setDrawingColor('black');
+        img.drawText('Copyright © #year(now())#', 20, 80, {font:"Arial",size:75});
 		img.write(expandPath('./wm/#getFileFromPath(i)#'));
 	}
 });
