@@ -1,0 +1,31 @@
+class {
+
+   	property name="comicSource" type="string";
+	property name="cacheSource" type="string";
+
+    /*
+    * I return a an array of which comics are available to read. This is not just the same
+    * as the source directory, but rather, a list of comics that have been parsed and include
+    * a thumbnail.
+    */
+    public function getAvailableComics() {
+        comics = [];
+        // first get our source
+        srcComics = directoryList(comicSource);
+        // now for each, we require at least one page in cache/slugify(filename) to be available (one file being __thumb)
+        for(comic in srcComics) {
+            // get the slugified name
+            slug = slugify(comic);
+            // check if we have a thumbnail in the cache
+            if(fileExists(cacheSource & "/" & slug & "__thumb.jpg")) {
+                // add to our list
+                comics.append({
+                    "name": comic,
+                    "slug": slug,
+                    "thumbnail": "/comiccache/" & slug & "/__thumb.jpg"
+                });
+            }
+        }
+        return comics;
+    }
+}

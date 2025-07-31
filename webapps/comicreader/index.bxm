@@ -1,0 +1,7 @@
+<bx:component template="components/layout.bxm" title="BoxLang Comic Book Reader">
+
+<h2>Currently Available Comics</h2>
+
+<bx:dump var="#application.comics.getAvailableComics()#">
+
+</bx:component>

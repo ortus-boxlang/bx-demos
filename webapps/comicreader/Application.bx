@@ -1,0 +1,34 @@
+class {
+
+    this.name = "Comic Book Reader";
+
+    public function onApplicationStart() {
+        application.comicSource = expandPath('./comics');
+        application.comicCache = expandPath('./comiccache');
+
+        if(!directoryExists(application.comicSource)) {
+            throw(message="Comic source directory does not exist: " & application.comicSource);
+        }
+        if(!directoryExists(application.comicCache)) {
+            createDirectory(application.comicCache);
+        }
+        application.comics = new classes.comics(comicSource=application.comicSource, cacheSource=application.comicCache);
+
+        // On startup, kick off the process to scan for new comics to parse.
+
+    }
+
+    
+	function onRequestStart(required string req) {
+
+        // REMOVE ME 
+        application.comics = new classes.comics(comicSource=application.comicSource, cacheSource=application.comicCache);
+
+		if(url.keyExists('refresh')) {
+			applicationStop();
+			bx:location url="/";
+		}
+		
+	}
+
+}
