@@ -1,0 +1,41 @@
+<html>
+<head>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js'></script>
+<script>
+
+document.addEventListener('DOMContentLoaded', async () => {
+	let events = await (await fetch('./events.bx?method=getEvents')).json();
+
+	// xform for fullcalendar
+	events = events.map(e => {
+		return {
+			title:e.title,
+			start:e.eventStart,
+			end:e.eventEnd
+		}
+	});
+
+	var calendarEl = document.getElementById('calendar');
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		initialView: 'dayGridMonth',
+		events
+	});
+	calendar.render();
+});
+
+</script>
+<style>
+div#calendar {
+	margin-left: 50px;
+	margin-right: 50px;
+	width: 100%;
+	max-width: 700px;
+}
+</style>
+</head>
+
+<body>
+<h1>Events Calendar</h1>
+<div id="calendar"></div>
+</body>
+</html>

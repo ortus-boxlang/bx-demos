@@ -1,6 +1,6 @@
 class {
 
-	public array function getEvents() {
+	remote array function getEvents() {
 
 		events = [];
 
