@@ -1,6 +1,6 @@
 <bx:param name="attributes.title" value="Comic Book Reader">
 
-<bx:if thisTag.executionMode == "start">
+<bx:if thisComponent.executionMode == "start">
 <bx:output>
 <!doctype html>
 <html lang="en">

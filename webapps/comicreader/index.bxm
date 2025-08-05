@@ -1,7 +1,21 @@
+<bx:script>
+comics = application.comics.getAvailableComics();
+</bx:script>
+
 <bx:component template="components/layout.bxm" title="BoxLang Comic Book Reader">
 
 <h2>Currently Available Comics</h2>
 
-<bx:dump var="#application.comics.getAvailableComics()#">
+<div class="row row-cols-4">
+<bx:loop array="#comics#" index="comic">
+    <div class="col">
+        <bx:output>
+        <p>
+        <a href="comic.bxm/#comic.slug#"><img src="#comic.thumbnail#" alt="#comic.name#" class="img-thumbnail"></a>
+        </p>
+        </bx:output>
+    </div>
+</bx:loop>
+</div>
 
 </bx:component>

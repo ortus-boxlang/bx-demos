@@ -1,0 +1,52 @@
+<bx:script>
+if(cgi.path_info.trim().len() === 0) {
+    bx:location url="/";
+} else slug = cgi.path_info.trim().replaceAll("/", "");
+
+try {
+    comic = application.comics.getComicBySlug(slug);
+} catch(e) {
+    bx:location url="/";
+}
+
+bx:param name="url.image" default="1";
+
+url.image = int(url.image);
+if(url.image < 1 || url.image > comic.images.len()) {
+    url.image = 1;
+}
+img = imageRead(comic.images[url.image]);
+</bx:script>
+
+<bx:component template="components/layout.bxm" title="BoxLang Comic Book Reader - #comic.name#">
+
+<bx:output>
+<h2>#comic.name# (Page #url.image# of #comic.images.len()#)</h2>
+
+<div class="container">
+  <div class="row justify-content-center">
+
+<bx:saveContent variable="nav">
+    <div class="btn-group" role="group">
+        <a class="btn btn-primary  <bx:if url.image is 1>disabled</bx:if>" href="/comic.bxm/#comic.slug#?image=#url.image-1#">Previous</a>
+        <a class="btn btn-primary" href="/comic.bxm/#comic.slug#?image=#url.image+1#">Next</a>
+    </div>
+</bx:saveContent>
+#nav#
+
+<!---
+Currently bugged...
+<bx:image action="writeToBrowser" source="#comic.images[url.image]#" class="img-fluid">
+--->
+<div>
+<img src="data:image/jpg;base64,#imageWriteBase64(img,'jpg')#" class="img-fluid" alt="#comic.name#">
+</div>
+
+#nav#
+
+    </div>
+</div>
+
+</bx:output>
+
+</bx:component>

@@ -2,6 +2,10 @@ class {
 
     this.name = "Comic Book Reader";
 
+   	this.javaSettings = {
+		loadPaths:[expandPath('./jars/junrar-7.5.5.jar')]
+	};
+
     public function onApplicationStart() {
         application.comicSource = expandPath('./comics');
         application.comicCache = expandPath('./comiccache');
@@ -15,7 +19,7 @@ class {
         application.comics = new classes.comics(comicSource=application.comicSource, cacheSource=application.comicCache);
 
         // On startup, kick off the process to scan for new comics to parse.
-
+        application.comics.scanForNewComics();
     }
 
     
