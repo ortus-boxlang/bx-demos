@@ -49,7 +49,6 @@ class {
 				println('this comic needs to be done');
 				// where I'll save
 				exportDir = cacheSource & "/" & slugify(getFileFromPath(comic));
-				println('for #comic# exportdir is #exportdir#');
 				directoryCreate(exportDir, true, true);
 				/*
 				ok, here comes the fun part. first, determine type
