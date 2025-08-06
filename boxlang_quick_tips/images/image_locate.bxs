@@ -1,7 +1,3 @@
-/*
-https://api.mapbox.com/search/geocode/v6/reverse?longitude=-91.96946111111112&latitude=30.18554722222&access_token=pk.eyJ1IjoicmF5bW9uZGNhbWRlbiIsImEiOiJjazNveHcxdnQwM2p0M2JwbnRoNDEwZmNqIn0.hXmayLfRFwaitzK7OCke_A
-*/
-
 function reverseGeoCode(lon,lat) {
 	bx:http url="https://api.mapbox.com/search/geocode/v6/reverse?longitude=#arguments.lon#&latitude=#arguments.lat#&access_token=pk.eyJ1IjoicmF5bW9uZGNhbWRlbiIsImEiOiJjazNveHcxdnQwM2p0M2JwbnRoNDEwZmNqIn0.hXmayLfRFwaitzK7OCke_A" result="res";
 	return jsonDeserialize(res.fileContent);
@@ -29,14 +25,10 @@ images.each(i => {
 		exif = img.getExifMetadata();
 		if(exif.keyExists("GPS Longitude") && exif.keyExists("GPS Latitude")) {
 
-			println(i);
-
-			//println("#exif['GPS Longitude']# #exif['GPS Longitude Ref']# -- #exif['GPS Latitude']# #exif['GPS Latitude Ref']#");
-
 			lon = coordinateStringToDecimal(exif['GPS Longitude']);
 			lat = coordinateStringToDecimal(exif['GPS Latitude']);
 			location = reverseGeoCode(lon, lat);
-			//println(location);
+			println(i);
 			println(location.features[1].properties.place_formatted);
 			println('-'.repeat(80));
 

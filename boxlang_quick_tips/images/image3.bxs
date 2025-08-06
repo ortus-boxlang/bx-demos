@@ -1,0 +1,11 @@
+images = directoryList(expandPath('./source'));
+
+images.each(i => {
+	if(isImageFile(i)) {
+		println(i);
+		img = imageRead(i);
+		img.setDrawingColor('black');
+        img.drawText('Copyright © #year(now())#', 20, 80, {font:"Arial",size:75});
+		img.write(expandPath('./wm/#getFileFromPath(i)#'));
+	}
+});

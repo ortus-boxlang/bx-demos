@@ -1,0 +1,77 @@
+class {
+
+   	property name="comicSource" type="string";
+	property name="cacheSource" type="string";
+
+	/*
+	* I return a an array of which comics are available to read. This is not just the same
+	* as the source directory, but rather, a list of comics that have been parsed and include
+	* a thumbnail.
+	*/
+	public function getAvailableComics() {
+		comics = [];
+		// first get our source
+		srcComics = directoryList(comicSource);
+		// now for each, we require at least one page in cache/slugify(filename) to be available (one file being __thumb)
+		for(comic in srcComics) {
+			// get the slugified name
+			slug = slugify(getFileFromPath(comic));
+			// check if we have a thumbnail in the cache
+			if(fileExists(cacheSource & "/" & slug & "/__thumb.jpg")) {
+				// add to our list
+				images = directoryList(path=cacheSource & "/" & slug, recurse=true, filter=(path) => {
+					return getFileInfo(path).type == "file" && isImageFile(path);
+				});
+				comics.append({
+					"name": GetFileFromPath(comic),
+					"slug": slug,
+					"thumbnail": "/comiccache/" & slug & "/__thumb.jpg",
+					"images":images
+				});
+			}
+		}
+
+		return comics;
+	}
+
+	public function getComicBySlug(slug) {
+		comics = getAvailableComics();
+		return comics[comics.find(c => c.slug == slug)];
+	}
+
+	public function scanForNewComics() {
+		srcComics = directoryList(comicSource);
+		processedComics = getAvailableComics();
+
+		for(comic in srcComics) {
+			println("Processing comic: " & comic); 
+			if(processedComics.find(c => c.name == GetFileFromPath(comic)) == 0) {
+				println('this comic needs to be done');
+				// where I'll save
+				exportDir = cacheSource & "/" & slugify(getFileFromPath(comic));
+				directoryCreate(exportDir, true, true);
+				/*
+				ok, here comes the fun part. first, determine type
+				I discovered some .cbr files are actually zips - isZipFile worked on it
+				*/
+				ext = comic.listlast('.').toLowerCase();
+				if(ext === 'cbz' || isZipFile(comic)) {
+					extract(format='zip', source=comic, destination=exportDir, overwrite=true);
+				} else if(ext === 'cbr') {
+					junRar = new com.github.junrar.Junrar();
+					junRar.extract(comic, exportDir);
+				}
+
+				// now we get the first image so we can make a thumbnail
+
+				firstImage = directoryList(path=exportDir,recurse=true, filter=(path) => {
+				    return getFileInfo(path).type == "file" && isImageFile(path);
+				}).first();
+				img = imageRead(firstImage);
+				img.scaleToFit(250, 250);
+				img.write(expandPath(exportDir & '/__thumb.jpg'));
+			}
+		}
+
+	}
+}
