@@ -1,0 +1,42 @@
+
+if(cgi.path_info.findNoCase('/img/') === 1) {
+	imgPath = cgi.path_info.replaceNoCase('/img/','');
+	/*
+	formats are:
+	file 
+	file/w (change to width of w - not working - https://ortussolutions.atlassian.net/browse/BLMODULES-81 )
+	file/w/h (change to width of w and height of h)
+	file/w/h/effect where effect is one of: grayscale/blur/negative
+	*/
+	parts = imgPath.split('/');
+	img = expandPath('./source/') & parts[1];
+
+	if(!fileExists(img)) {
+		println('file didnt exist');
+		bx:header statusCode=404; 
+		return;
+	}
+
+	img = imageRead(img);
+
+	if(parts.length >= 4) {
+		effect = parts[4];
+		if(effect === "grayscale") img.grayscale();
+		if(effect === "blur") img.blur(20);
+		if(effect === "negative") img.negative();
+	}
+
+	if(parts.length >= 3) {
+		img.scaleToFit(parts[2], parts[3]);
+	} else if(parts.length == 2) {
+		// unfortunately, buggy right now
+		img.scaleToFit(parts[2]);
+	} else if(parts.length == 1) {
+		// another small bug, if you don't do _something_ with the image, getBlob fails
+		img.info();
+	}
+
+	bx:header name="Content-Type" value="image/jpeg"; 
+	bx:content variable="#img.getBlob()#";
+
+}
