@@ -1,0 +1,12 @@
+class {
+	this.name = "rewrite_blog_demo";
+
+	public function onApplicationStart() {
+		application.blogService = new blogService(postDirectory=expandPath('./posts'));
+	}
+
+	public function onRequestStart() {
+		// remove me
+		application.blogService = new blogService(postDirectory=expandPath('./posts'));
+	}
+}

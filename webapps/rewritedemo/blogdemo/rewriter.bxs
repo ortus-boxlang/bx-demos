@@ -1,0 +1,10 @@
+/*
+Ok, so technically, we should validate the path, ensure it matches /YYYY/DD/MM/slug, 
+but for now I'm just going to assume it does
+*/
+post = application.blogService.findPostByPermalink(cgi.path_info);
+if(post) {
+	request.post = post;
+	bx:include template="post.bxm";
+} else bx:location url="/";
+

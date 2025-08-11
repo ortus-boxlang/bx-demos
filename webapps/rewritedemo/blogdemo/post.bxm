@@ -1,0 +1,7 @@
+
+<bx:output>
+<p><a href="/">Home</a></p>
+<h2>#request.post.data.title#</h2>
+
+#request.post.contents#
+</bx:output>

@@ -1,0 +1,14 @@
+<bx:script>
+posts = application.blogService.getPosts().slice(1,10);
+
+</bx:script>
+
+<h2>Blog Posts</h2>
+
+<bx:loop item="post" array="#posts#">
+	<bx:output>
+	<p>
+	<a href="#post.data.permalink#">#post.data.title#</a> (#post.data.date.dateFormat('short')#)
+	</p>
+	</bx:output>
+</bx:loop>
