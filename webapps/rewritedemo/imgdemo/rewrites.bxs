@@ -32,7 +32,7 @@ if(cgi.path_info.findNoCase('/img/') === 1) {
 		// unfortunately, buggy right now
 		img.scaleToFit(parts[2]);
 	} else if(parts.length == 1) {
-		// another small bug, if you don't do _something_ with the image, getBlob fails
+		// another small bug, if you don't do _something_ with the image, getBlob fails. Bug is filed.
 		img.info();
 	}
 
