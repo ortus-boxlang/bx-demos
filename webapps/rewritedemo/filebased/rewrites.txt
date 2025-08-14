@@ -1,0 +1,8 @@
+/blog	/news
+
+# We renamed this in 1921
+/pr		/pressrelease
+
+/prods/*	/products/:splat
+
+/products/*	/products/:product
