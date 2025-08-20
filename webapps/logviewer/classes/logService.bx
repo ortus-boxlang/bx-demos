@@ -3,6 +3,23 @@ class {
 	public function getLogDirectory() {
 		//return getBoxRuntime().getConfiguration().asStruct().logging.logsDirectory;
 		// below per advice from Brad
+		/*
+		Brad's advice was pretty good so I wanted to capture it. This is copied from him on Slack:
+
+In BoxLang, there's not just one config object at the runtime
+
+The context hierarchy can have many different versions of the config which have been modified for that app/session/request/whatever
+Always get the current config from you local context's getConfig() method
+
+getBoxContext().getConfig().logging.logsDirectory
+
+This follows a "decorator" pattern where each context will delegate to their parent context to get the parent's config, and then apply any overrides to it that are neccessary.
+So, even though, there is a runtime config object tracked at the runtime, the "visible" config is the one you get from your local context
+
+For log dir, it prolly doesn't matter much, but other settings may be different in your "local" context's config than they are in the runtime, whcih is more like server defaults
+
+For example, if the timezone had been overridden for this request, the local context will give you a diff timezone back in the config than you'll see in the runtime config because it's being overridden in the request box context
+		*/
 		return getBoxContext().getConfig().logging.logsDirectory;
 	}
 
