@@ -17,7 +17,7 @@ try {
 
 <div x-data="app">
 <input placeholder="Type to filter" class="form-control" style="margin-bottom: 5px" x-model="filter">
-<textarea class="form-control" style="height: 500px" x-model="logcontents" x-ref="logTextArea">
+<textarea class="form-control" style="height: 500px" x-ref="logTextArea">
 #logContents#
 </textarea>
 </div>
