@@ -1,4 +1,5 @@
 /blog	/news
+/blog2	/news/index.bxm	200
 
 # We renamed this in 1921
 /pr		/pressrelease

@@ -1,0 +1,27 @@
+<bx:script>
+bx:param name="url.log" default="";
+
+// for now it's just the contents, may be more complex later
+try {
+	logContents = application.logService.getLog(url.log);
+} catch(e) {
+	bx:location url="/";
+}
+
+</bx:script>
+
+<bx:component template="components/layout.bxm" title="BL Log Viewer - #url.log#">
+
+<bx:output>
+<h1>#url.log#</h1>
+
+<div x-data="app">
+<input placeholder="Type to filter" class="form-control" style="margin-bottom: 5px" x-model="filter">
+<textarea class="form-control" style="height: 500px" x-model="logcontents" x-ref="logTextArea">
+#logContents#
+</textarea>
+</div>
+
+</bx:output>
+
+</bx:component>

@@ -1,0 +1,13 @@
+class {
+
+	this.name = "BL Log Viewer";
+
+	public function onApplicationStart() {
+		application.logService = new classes.logService();
+	}
+
+	public function onRequestStart() {
+		// remove me
+		application.logService = new classes.logService();
+	}
+}

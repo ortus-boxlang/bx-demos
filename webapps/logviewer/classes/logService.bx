@@ -1,0 +1,23 @@
+class {
+
+	public function getLogDirectory() {
+		//return getBoxRuntime().getConfiguration().asStruct().logging.logsDirectory;
+		// below per advice from Brad
+		return getBoxContext().getConfig().logging.logsDirectory;
+	}
+
+	public function getLogs() {
+		return directoryList(path=getLogDirectory(),filter="*.log",listInfo="query");
+	}
+
+	public function getLog(l) {
+		/*
+		Don't just do fileExists as we'd have to block path traversal attacks, instead getLogs
+		and ensure it's in there
+		*/
+		goodLog = getLogs().columnData('name').find(l) gte 1;
+		if(!goodLog) throw('Log not valid');
+		return fileRead(getLogDirectory() & "/" &  l);
+	}
+
+}

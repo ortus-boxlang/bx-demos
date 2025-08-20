@@ -1,8 +1,8 @@
 RW_FILE = './rewrites.txt';
 
-// load up rewrites and parse it (will cache)
 if(!fileExists(RW_FILE)) return;
 
+// load up rewrites and parse it (will cache)
 function parseRWFile(contents) {
 	rules = [];
 	lines = contents.listToArray('#char(10)##char(13)#');
@@ -18,7 +18,6 @@ function parseRWFile(contents) {
 }
 
 rules = parseRWFile(fileRead(RW_FILE));
-//writedump(rules);
 
 rules.each(r => {
 
@@ -26,11 +25,12 @@ rules.each(r => {
 	if(cgi.path_info == r.from) {
 		code = r.code?:301;
 		// special handling for 200
-		if(code !== 200) bx:location url=r.to statusCode=code;
+		if(code !== "200") bx:location url=r.to statusCode=code;
 		else {
 			// will only work if you redirect to a specifc file, not a directory
 			// so ie:   /something /somethingelse/index.bxm 200
 			bx:include template=r.to;
+			abort;
 		}
 	}
 
@@ -39,23 +39,17 @@ rules.each(r => {
 		// first, does our current request match r.from
 		normalizedPart = r.from.replace("*","");
 		if(cgi.path_info.find(normalizedPart) === 1) {
-			println('splat matching time!');
 			splat = cgi.path_info.replace(normalizedPart,"");
-			println("splat: #splat#");
 			newLocation = r.to.replace(":splat", splat);
 			bx:location url=newLocation;
 		}
 	} else if(r.from.endsWith("*") && r.to.reFind(":[a-zA-Z]+$")) {
 		// something/* to something/:name such that something/index.bxm is loaded with request.name == the value
-		println("RAY #cgi.path_info#");
 		matchedToken = r.to.mid(r.to.reFind(":[a-zA-Z]+$") + 1, r.to.len());
-		println('mt #matchedToken#');
 		normalizedPart = r.from.replace("*","");
-		println('np is #normalizedPart#');
 		splat = cgi.path_info.replace(normalizedPart,"");
 		request[matchedToken] = splat;
 		normalizedLocation = r.to.replace(":#matchedToken#","");
-		println('mt: #matchedToken#, splat #splat#');
 		bx:include template="#normalizedLocation#/index.bxm";
 		abort;
 	}
