@@ -1,0 +1,12 @@
+<bx:script>
+//posts = application.blogService.getPostsByTag(tag);
+//writedump(posts);
+writedump(tag.getPosts().len());
+</bx:script>
+
+
+<bx:component template="components/layout.bxm" title="Posts in tag: #tag.getName()#">
+
+	<bx:output>
+	</bx:output>
+</bx:component>

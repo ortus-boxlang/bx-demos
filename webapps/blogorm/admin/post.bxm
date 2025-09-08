@@ -1,5 +1,5 @@
 <bx:script>
-if(url.keyExists("id")) {
+if(url.keyExists("id") and url.id.len()) {
 	post = application.blogService.getPostById(url.id);
 } else {
 	post = application.blogService.newPost();
@@ -10,6 +10,7 @@ tags = application.blogService.getTags();
 if(form.keyExists("savePost")) {
 
 	post.setTitle(form.title);
+	post.setPermalink(slugify(form.title));
 	post.setBody(form.body);
 	/*
 	ok, so to handle tag mappings, we loop over each tag from the db

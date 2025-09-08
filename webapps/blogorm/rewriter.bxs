@@ -5,4 +5,10 @@ if(cgi.path_info.findNoCase("/post")) {
 	
 	include "post.bxm";
 
+} else if(cgi.path_info.findNoCase("/tag")) {
+	tag = cgi.path_info.replacenocase("/tag/","");
+	tag = application.blogService.getTagByName(tag);
+	if(!tag) bx:location url="/";
+
+	include "tag.bxm";
 }

@@ -26,6 +26,10 @@ class {
 		return ormExecuteQuery("from post where permalink = :slug", {slug:arguments.slug}, true);
 	}
 
+	public function getTagByName(required string name) {
+		return ormExecuteQuery("from tag where name = :name", {name:arguments.name}, true);
+	}
+
 	public function getTags() {
 		return entityLoad(entityName="tag", uniqueOrOrder="name asc");
 	}

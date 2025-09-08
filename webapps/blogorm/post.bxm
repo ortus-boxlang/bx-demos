@@ -1,4 +1,9 @@
-
+<bx:script>
+tags = post.getTags();
+tagList = tags.reduce((prev, cur) => {
+	return prev.listAppend(cur.getName());
+}, '');
+</bx:script>
 
 
 <bx:component template="components/layout.bxm" title="#post.getTitle()#">
@@ -6,9 +11,10 @@
 	<bx:output>
 	<h2>#post.getTitle()#</h2>
 	<p>
-	Published on #dateFormat(post.getCreated(), "MMMM d, yyyy")#
+	Published on #dateFormat(post.getCreated(), "MMMM d, yyyy")#<br>
+	Published in: #tagList#
 	</p>
 
-	#post.getBody()#
+	#paragraphFormat(post.getBody())#
 	</bx:output>
 </bx:component>

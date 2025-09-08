@@ -1,4 +1,10 @@
-<bx:param name="attributes.title" default="">
+<bx:script>
+recentPosts = application.blogService.getPosts(5);
+tags = application.blogService.getTags();
+
+bx:param name="attributes.title" default="";
+
+</bx:script>
 
 <bx:if thisComponent.executionMode is "start">
 <!DOCTYPE html>
@@ -80,20 +86,24 @@
                         Recent Posts
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><a href="#">Post Title One</a></li>
-                        <li class="list-group-item"><a href="#">Post Title Two</a></li>
-                        <li class="list-group-item"><a href="#">Post Title Three</a></li>
+                        <bx:loop item="p" collection="#recentPosts#">
+                            <bx:output>
+                            <li class="list-group-item"><a href="/post/#p.getPermalink()#">#p.getTitle()#</a></li>
+                            </bx:output>
+                        </bx:loop>
                     </ul>
                 </div>
 
                 <div class="card sidebar-card shadow-sm">
                     <div class="card-header fw-bold">
-                        Archives
+                        Tags
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><a href="#">September 2025</a></li>
-                        <li class="list-group-item"><a href="#">August 2025</a></li>
-                        <li class="list-group-item"><a href="#">July 2025</a></li>
+                        <bx:loop item="t" collection="#tags#">
+                            <bx:output>
+                            <li class="list-group-item"><a href="/tag/#urlEncodedFormat(t.getName())#">#t.getName()#</a></li>
+                            </bx:output>
+                        </bx:loop>
                     </ul>
                 </div>
             </div>
