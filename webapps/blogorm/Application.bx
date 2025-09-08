@@ -1,0 +1,31 @@
+class {
+
+	this.name = "blogorm";
+	this.ormEnabled = true;
+	this.ormSettings = {
+		entityPaths = "entities",
+		dbCreate:"dropcreate",
+		dialect:"MySQL5",
+		logSQL:true,
+		eventHandling: true
+	}
+
+	this.datasource = {
+		driver:"mysql",
+		host:getSystemSetting("MYSQL_HOST"),
+		port:getSystemSetting("MYSQL_PORT"),
+		database:"blogorm", 
+		username:getSystemSetting("MYSQL_USERNAME"),
+		password:getSystemSetting("MYSQL_PWORD")
+	}
+
+	public function onApplicationStart() {
+		application.blogService = new classes.blogService();
+	}
+
+	public function onRequestStart() {
+		// remove me, honest!
+		application.blogService = new classes.blogService();
+	}
+
+}

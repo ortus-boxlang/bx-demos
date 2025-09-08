@@ -1,0 +1,15 @@
+class {
+
+	public function getPosts(numeric top) {
+		options = {};
+
+		if(arguments.keyExists("top")) options.maxResults = arguments.top;
+		return entityLoad(entityName="post", uniqueOrOrder="created desc", options = options);
+
+	}
+
+	public function getPostBySlug(required string slug) {
+		return ormExecuteQuery("from post where permalink = :slug", {slug:arguments.slug}, true);
+	}
+
+}

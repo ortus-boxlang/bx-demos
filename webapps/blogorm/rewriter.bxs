@@ -1,0 +1,8 @@
+if(cgi.path_info.findNoCase("/post")) {
+	slug = cgi.path_info.replaceNoCase("/post/","");
+	post = application.blogService.getPostBySlug(slug);
+	if(!post) bx:location url="/";
+	
+	include "post.bxm";
+
+}

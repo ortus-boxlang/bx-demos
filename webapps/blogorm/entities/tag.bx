@@ -1,0 +1,9 @@
+class persistent="true" {
+
+	property name="id" fieldtype="id" generator="increment" update="false";
+
+	property name="name" type="string";
+
+	property name="posts" fieldtype="many-to-many" class="post" linktable="posts_tags" singularName="post" fkcolumn="tagidfk";
+
+}

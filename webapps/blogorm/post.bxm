@@ -1,0 +1,14 @@
+
+
+
+<bx:component template="components/layout.bxm" title="#post.getTitle()#">
+
+	<bx:output>
+	<h2>#post.getTitle()#</h2>
+	<p>
+	Published on #dateFormat(post.getCreated(), "MMMM d, yyyy")#
+	</p>
+
+	#post.getBody()#
+	</bx:output>
+</bx:component>

@@ -1,0 +1,21 @@
+class persistent="true" {
+
+	property name="id" fieldtype="id" generator="increment" update="false";
+
+	property name="title" type="string";
+	property name="created" type="date";
+	property name="updated" type="date";
+	property name="body" ormtype="text" type="string";
+	property name="tags" fieldtype="many-to-many" class="tag" linktable="posts_tags" singularName="tag" fkcolumn="postidfk";
+	property name="permalink" type="string";
+
+	function preInsert(entity) {
+		entity.setCreated(now());
+	}
+
+	function getExtract(length=500) {
+		ext = this.getBody()?:'';
+		if(ext.len() <= arguments.length) return ext;
+		return ext.left(arguments.length) & "...";
+	}
+}
