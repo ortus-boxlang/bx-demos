@@ -1,5 +1,15 @@
 class {
 
+	public function addTag(required string name) {
+		// to do, maybe, do a quick check to see if name exists, and if so, return the existing one
+		// would handle accidents in the editor
+		tag = entityNew("tag");
+		tag.setName(arguments.name);
+		entitySave(tag);
+		ormFlush();
+		return tag;
+	}
+
 	public function getPosts(numeric top) {
 		options = {};
 
@@ -8,8 +18,25 @@ class {
 
 	}
 
+	public function getPostByid(required id) {
+		return entityLoadByPK("post", arguments.id);
+	}
+
 	public function getPostBySlug(required string slug) {
 		return ormExecuteQuery("from post where permalink = :slug", {slug:arguments.slug}, true);
+	}
+
+	public function getTags() {
+		return entityLoad(entityName="tag", uniqueOrOrder="name asc");
+	}
+
+	public function newPost() {
+		return entityNew("post");
+	}
+
+	public function savePost(p) {
+		entitySave(p);
+		ormFlush();
 	}
 
 }

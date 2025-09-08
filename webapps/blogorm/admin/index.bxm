@@ -1,0 +1,14 @@
+<bx:component template="../components/layout.bxm" title="Our Blog - Admin">
+
+	<h2>Admin</h2>
+
+	<p>
+	This will usually have security and stuff...
+	</p>
+
+	<p>
+	<a href="posts.bxm">Manage Posts</a><br/>
+	<a href="tags.bxm">Manage Tags</a>
+	</p>
+
+</bx:component>

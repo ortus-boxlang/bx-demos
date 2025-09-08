@@ -1,0 +1,31 @@
+<bx:script>
+posts = application.blogService.getPosts();
+</bx:script>
+
+<bx:component template="../components/layout.bxm" title="Manage Posts">
+
+	<bx:output>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th scope="col">Title</th>
+				<th scope="col">Created</th>
+				<th scope="col">Updated</th>
+			</tr>
+		</thead>
+		<tbody>
+		<bx:loop item="post" collection="#posts#">
+			<tr>
+				<td><a href="post.bxm?id=#post.getID()#">#post.getTitle()#</a></td>
+				<td>#dateTimeFormat(post.getCreated())#</td>
+				<td>#dateTimeFormat(post.getUpdated())#</td>
+			</tr>
+		</bx:loop>
+		</tbody>
+	</table>
+	</bx:output>
+
+	<a role="button" class="btn btn-primary" href="post.bxm">Add Post</a>
+	
+
+</bx:component>

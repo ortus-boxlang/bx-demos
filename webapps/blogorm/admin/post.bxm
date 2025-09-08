@@ -1,0 +1,67 @@
+<bx:script>
+if(url.keyExists("id")) {
+	post = application.blogService.getPostById(url.id);
+} else {
+	post = application.blogService.newPost();
+}
+
+tags = application.blogService.getTags();
+// validation logic - maybe will do, maybe not 
+if(form.keyExists("savePost")) {
+
+	post.setTitle(form.title);
+	post.setBody(form.body);
+	/*
+	ok, so to handle tag mappings, we loop over each tag from the db
+	if it wasn't selected, remove it from the post ob
+	if it was, add it
+	*/
+	// in case they deselect all, or fresh db
+	bx:param name="form.tag" default="";
+	for(t in tags) {
+		
+		if(form.tag.listFind(t.getId()) == 0) {
+			post.removeTag(t);
+		} else {
+			if(!post.hasTag(t)) post.addTag(t);
+		}
+		
+	}
+
+	if(form.keyExists("newtag") && form.newtag.len()) {
+		tag = application.blogService.addTag(form.newtag);
+		post.addTag(tag);
+	}
+
+	application.blogService.savePost(post);
+	bx:location url="posts.bxm";
+}
+</bx:script>
+
+<bx:component template="../components/layout.bxm" title="Edit Post">
+
+	<bx:output>
+	<form method="post" action="post.bxm?id=#post.getId()#">
+		<div class="mb-3">
+			<label for="title" class="form-label">Title</label>
+			<input type="text" class="form-control" id="title" aria-describedby="title" name="title" value="#post.getTitle()#">
+		</div>
+		<div class="mb-3">
+			<label for="body" class="form-label">Body</label>
+			<textarea class="form-control" id="body" name="body" rows=20>#post.getBody()#</textarea>
+		</div>
+		<div class="mb-3">
+			<label for="tags" class="form-label">Tags</label>
+			<select class="form-select" multiple name="tag">
+			<bx:loop item="tag" collection="#tags#">
+				<option <bx:if post.hasTag(tag)>selected</bx:if> value="#tag.getId()#">#tag.getName()#</option>
+			</bx:loop>
+			</select>
+			<input type="text" class="form-control" id="newtag" aria-describedby="newtag" name="newtag" placeholder="New Tag">
+		</div>
+
+		<button type="submit" class="btn btn-primary" name="savePost">Save</button>
+	</form>
+	</bx:output>
+
+</bx:component>

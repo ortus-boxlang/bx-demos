@@ -11,6 +11,11 @@ class persistent="true" {
 
 	function preInsert(entity) {
 		entity.setCreated(now());
+		entity.setUpdated(now());
+	}
+
+	function preUpdate(entity) {
+		entity.setUpdated(now());
 	}
 
 	function getExtract(length=500) {
