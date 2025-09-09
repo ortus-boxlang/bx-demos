@@ -6,6 +6,7 @@ class {
 		tag = entityNew("tag");
 		tag.setName(arguments.name);
 		entitySave(tag);
+//		ormFlush();
 		return tag;
 	}
 
@@ -53,22 +54,22 @@ class {
 			tags.append(entityLoadByPK("tag", t));
 		}
 
-
 		if(arguments.newtag.len()) {
 			// todo, see if name matches existing
 			newtag = addTag(arguments.newtag);
 			tags.append(newtag);
 		}
 
-		p.setTags(tags);
-
-		entitySave(p);
+//		p.setTags(tags);		
 
 		for(t in tags) {
-			if(!t.hasPost(p)) t.addPost(p);
-			entitySave(t);
+			if(!p.hasTag(t)) p.addTag(t);
+			if(!t.hasPost(p)) {
+				t.addPost(p);
+			}
 		}
 
+		entitySave(p);
 		ormFlush();
 	}
 
