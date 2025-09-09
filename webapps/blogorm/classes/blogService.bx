@@ -38,8 +38,38 @@ class {
 		return entityNew("post");
 	}
 
-	public function savePost(p) {
+	
+	/*
+	I'm given a Post entity with new info in it and then a list of chosen tag ids
+	and a new tag. I'm responsible for ensuring I remove any existing p-t association, 
+	associated posts and tags, and possibly add a new tag
+	*/
+	public function savePost(p, tagids, newtag) {
+		/*
+		first, get a set of tags
+		*/
+		tagids = arguments.tagids.listToArray();
+		tags = [];
+		for(t in tagids) {
+			tags.append(entityLoadByPK("tag", t));
+		}
+
+
+		if(arguments.newtag.len()) {
+			// todo, see if name matches existing
+			newtag = addTag(arguments.newtag);
+			tags.append(newtag);
+		}
+
+		p.setTags(tags);
+
 		entitySave(p);
+
+		for(t in tags) {
+			if(!t.hasPost(p)) t.addPost(p);
+			entitySave(t);
+		}
+
 		ormFlush();
 	}
 
