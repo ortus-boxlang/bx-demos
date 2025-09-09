@@ -6,7 +6,7 @@ class persistent="true" {
 	property name="created" type="date";
 	property name="updated" type="date";
 	property name="body" ormtype="text" type="string";
-	property name="tags" fieldtype="many-to-many" class="tag" linktable="posts_tags" singularName="tag" fkcolumn="postidfk";
+	property name="tags" fieldtype="many-to-many" class="tag" linktable="posts_tags" singularName="tag" fkcolumn="postidfk" inversejoincolumn="tagidfk";
 	property name="permalink" type="string";
 
 	function preInsert(entity) {

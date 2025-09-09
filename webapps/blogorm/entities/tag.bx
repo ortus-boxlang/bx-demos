@@ -4,6 +4,6 @@ class persistent="true" {
 
 	property name="name" type="string";
 
-	property name="posts" fieldtype="many-to-many" class="post" linktable="posts_tags" singularName="post" fkcolumn="tagidfk";
+	property name="posts" fieldtype="many-to-many" class="post" linktable="posts_tags" singularName="post" fkcolumn="tagidfk" inversejoincolumn="postidfk";
 
 }
