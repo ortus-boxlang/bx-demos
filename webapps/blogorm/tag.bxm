@@ -1,12 +1,27 @@
 <bx:script>
 //posts = application.blogService.getPostsByTag(tag);
 //writedump(posts);
-writedump(tag.getPosts().len());
+posts = tag.getPosts();
 </bx:script>
 
 
 <bx:component template="components/layout.bxm" title="Posts in tag: #tag.getName()#">
 
+	<bx:loop item="post" collection="#posts#">
 	<bx:output>
+	<article class="card blog-post">
+		<div class="card-body p-4">
+			<h2 class="card-title fw-bold">#post.getTitle()#</h2>
+			<p class="card-subtitle text-muted mb-2">
+				<small>Written on #dateFormat(post.getCreated(), "MMMM d, yyyy")#</small>
+			</p>
+			<p class="card-text">
+				#post.getExtract()#
+			</p>
+			<a href="/post/#post.getPermalink()#" class="btn btn-primary mt-2 text-white">Read More &raquo;</a>
+		</div>
+	</article>
 	</bx:output>
+	</bx:loop>
+
 </bx:component>

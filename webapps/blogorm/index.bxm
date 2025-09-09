@@ -1,52 +1,25 @@
 <bx:script>
-if(url.keyexists("create")) {
-	tag = entityNew("Tag");
-	tag.setName("development");
-	entitySave(tag);
-
-	writeoutput("<p>make a post, damnit!</p>");
-	post = entityNew("Post");
-	//writedump(post);
-	post.setTitle("New post 2 #createUUID()#");
-	post.setBody("
-Props for this article go to my best friend, Todd Sharp, who yesterday said something along the lines of,  is pretty much akin to bring out a laser pointer in front of a cat. Not only do I love getting ideas for new demos, his idea was actually pretty freaking brilliant, which means I get to pretend I'm brilliant as well.
-
-His idea was this: Given a user created prompt meant to be shipped off to a proper (i.e. maybe expensive) Generate AI API, can we use tools to help improve the prompt and make it cheaper before used. Given we've got AI in the browser via Chrome (ok, we will have it soon), this seemed absolutely possible and I quickly whipped up a demo.
-
-As usual, the normal caveats apply. To test this, you'll want to use Chrome Canary with the appropriate flags enabled and such. As I've suggested before, join the EPP to get access to additional docs and support forums for help getting started. (Or just subscribe to my blog and keep reading my posts.)
-	");
-
-	post.addTag(tag);
-	post.setPermalink(slugify(post.getTItle()));
-	entitySave(post);
-
-
-	ormFlush();
-}
-
 posts = application.blogService.getPosts(5);
 </bx:script>
 
 
 <bx:component template="components/layout.bxm" title="Our Blog">
 
-
-		<bx:loop item="post" collection="#posts#">
-		<bx:output>
-		<article class="card blog-post">
-			<div class="card-body p-4">
-				<h2 class="card-title fw-bold">#post.getTitle()#</h2>
-				<p class="card-subtitle text-muted mb-2">
-					<small>Written on #dateFormat(post.getCreated(), "MMMM d, yyyy")#</small>
-				</p>
-				<p class="card-text">
-					#post.getExtract()#
-				</p>
-				<a href="/post/#post.getPermalink()#" class="btn btn-primary mt-2 text-white">Read More &raquo;</a>
-			</div>
-		</article>
-		</bx:output>
-		</bx:loop>
-
+	<bx:loop item="post" collection="#posts#">
+	<bx:output>
+	<article class="card blog-post">
+		<div class="card-body p-4">
+			<h2 class="card-title fw-bold">#post.getTitle()#</h2>
+			<p class="card-subtitle text-muted mb-2">
+				<small>Written on #dateFormat(post.getCreated(), "MMMM d, yyyy")#</small>
+			</p>
+			<p class="card-text">
+				#post.getExtract()#
+			</p>
+			<a href="/post/#post.getPermalink()#" class="btn btn-primary mt-2 text-white">Read More &raquo;</a>
+		</div>
+	</article>
+	</bx:output>
+	</bx:loop>
 
 </bx:component>
