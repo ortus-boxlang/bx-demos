@@ -6,7 +6,6 @@ class {
 		tag = entityNew("tag");
 		tag.setName(arguments.name);
 		entitySave(tag);
-		ormFlush();
 		return tag;
 	}
 
