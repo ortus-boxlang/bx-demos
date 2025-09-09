@@ -1,6 +1,4 @@
 <bx:script>
-//posts = application.blogService.getPostsByTag(tag);
-//writedump(posts);
 posts = tag.getPosts();
 </bx:script>
 
