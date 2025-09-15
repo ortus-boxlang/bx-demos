@@ -1,0 +1,65 @@
+// credentials:
+algoliaAppId = getSystemSetting("ALGOLIA_APP_ID");
+algoliaAdminId = getSystemSetting("ALGOLIA_ADMIN_ID");
+algoliaIndex = getSystemSetting("ALGOLIA_INDEX");
+
+algoliaBaseURL = "https://#algoliaAppId#.algolia.net";
+
+function fmParse(s) {
+	local.fm = s.reFind('---(.*?)---(.*)', 1, true);
+
+	/*
+	I'm a bit rusty on reFind, but fm.match will be an array where [2] is the str I want.
+	I'm not 100% confident of this
+	*/
+	//writedump(fm);
+	if(fm.match.len() != 3) {
+		return { data:{}, contents:markdown(s) };
+	}
+	
+	local.data = yamlDeserialize(fm.match[2]);
+
+	local.content = fm.match[3];
+	return { data:data, contents:markdown(content) }
+}
+
+
+// Get our content
+content = directoryList(path: "src", recurse: true, filter: path -> path.endsWith(".md"));
+
+// Parse our content
+data = [];
+
+content.forEach(c => data.append(fmParse(fileRead(c))));
+println("I've parsed #data.len()# items to send to our index.");
+
+/*
+for each, we will do an Add/Replace call with our object data. algolia can make it's own primary
+key, but we will use the permalink value from our content
+*/
+data.forEach(d => {
+
+	record = {
+		// CASE MATTERS!
+		objectID:d.data.permalink,
+		title:d.data.title, 
+		date:d.data.date,
+		content:d.contents.left(9_000),
+		link:d.data.permalink
+	};
+
+	bx:http url="#algoliaBaseURL#/1/indexes/#algoliaIndex#" method="post" result="result" {
+		bx:httpparam type="header" name="x-algolia-application-id" value="#algoliaAppId#";
+		bx:httpparam type="header" name="x-algolia-api-key" value="#algoliaAdminId#";
+		bx:httpparam type="body" value="#record.toJSON()#";
+	}
+
+	if(result.statusCode !== 201) {
+		println("Something went wrong...");
+		writedump(result);
+		abort;
+	}
+
+});
+
+println("Indexing complete!");

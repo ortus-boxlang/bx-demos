@@ -1,0 +1,41 @@
+
+class {
+
+	// credentials:
+	algoliaAppId = getSystemSetting("ALGOLIA_APP_ID");
+	algoliaAdminId = getSystemSetting("ALGOLIA_ADMIN_ID");
+	algoliaIndex = getSystemSetting("ALGOLIA_INDEX");
+
+	algoliaBaseURL = "https://#algoliaAppId#.algolia.net";
+
+	function main(args) {
+		if(args.len() === 0) {
+			println("Pass a search term via the command.");
+			abort;
+		} else local.term = args[1].trim();
+
+		println("Searching for: #term#");
+		results = search(term);
+		println("There were #results.nbHits# total results for this term:#char(10)#");
+		results.hits.forEach(h => {
+			println("#h.title# (https://www.raymondcamden.com#h.link#) ");
+		});
+	}
+
+	function search(required string term) {
+
+		// lots and LOTS of options here: https://www.algolia.com/doc/rest-api/search/#tag/Search/operation/searchSingleIndex
+		local.body = {
+			query:term
+		};
+
+		bx:http url="#algoliaBaseURL#/1/indexes/#algoliaIndex#/query" method="post" result="local.result" {
+			bx:httpparam type="header" name="x-algolia-application-id" value="#algoliaAppId#";
+			bx:httpparam type="header" name="x-algolia-api-key" value="#algoliaAdminId#";
+			bx:httpparam type="body" value="#body.toJSON()#";
+		}
+
+		return result.fileContent.fromJSON();
+
+	}
+}
