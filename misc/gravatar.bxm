@@ -1,0 +1,15 @@
+<bx:script>
+// https://docs.gravatar.com/sdk/images/
+function gravatarURL(email, size=80, defaultImage="mp") {
+	email = email.trim().toLowerCase().hash('sha-256');
+	return "https://www.gravatar.com/avatar/#email#?s=#arguments.size#&d=#arguments.defaultImage#"; 
+}
+</bx:script>
+
+<bx:output>
+#gravatarURL('jedimaster@foxitsoftware.com')#<br/>
+#gravatarURL('raymondcamden@gmail.com',300)#<br/>
+#gravatarURL('thispersonwontexistsoweshouldgetthedefaultorelse@gmail.com',300)#<br/>
+#gravatarURL('thispersonwontexistsoweshouldgetthedefaultorelse@gmail.com',300,'monsterid')#<br/>
+
+</bx:output>
