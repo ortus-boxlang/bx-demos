@@ -1,0 +1,98 @@
+<bx:script>
+bx:param name="url.code" default="";
+bx:param name="url.state" default="";
+bx:param name="url.error" default="";
+
+callbackURL = "http" & (cgi.server_port_secure?"s":"") & "://" & cgi.server_name & ((cgi.server_port !== 80 && cgi.server_port !== 443)?":" & cgi.server_port:"") & cgi.path_info & cgi.script_name;
+
+
+if(url.code !== '' || url.error !== '') {
+	result = validateResult(url.code, url.error, url.state, session.jsessionid, application.googleAuth.clientId, application.googleAuth.clientSecret, callbackURL);
+
+	if(result.status) {
+		session.auth = result.auth;
+		bx:location url="/";
+	} else {
+		writedump(result);
+		abort;
+	}
+}
+
+function validateResult(code, error, remoteState, clientState, clientId, clientSecret, callbackURL) {
+	var result = {};
+
+	//If error is anything, we have an error
+	if(error != "") {
+		result.status = false;
+		result.message = error;
+		return result;
+	}
+
+	//Then, ensure states are equal
+	if(remoteState != clientState) {
+		result.status = false;
+		result.message = "State values did not match.";
+		return result;
+	}
+
+	var auth = getGoogleToken(code,clientId,clientSecret,callbackURL);
+
+	if(structKeyExists(auth, "error")) {
+		result.status = false;
+		result.message = auth.error;
+		return result;
+	}
+		
+	result.status = true;
+	result.auth = auth;
+
+	return result;
+}
+
+//Credit: http://www.sitekickr.com/blog/http-post-oauth-coldfusion
+function getGoogleToken(code,clientId,clientSecret,callback) {
+
+	var postBody = "code=" & UrlEncodedFormat(arguments.code) & "&";
+			postBody = postBody & "client_id=" & UrlEncodedFormat(arguments.clientid) & "&";
+			postBody = postBody & "client_secret=" & UrlEncodedFormat(arguments.clientsecret) & "&";
+			postBody = postBody & "redirect_uri=" & UrlEncodedFormat(arguments.callback) & "&";
+			postBody = postBody & "grant_type=authorization_code";
+
+	bx:http url="https://accounts.google.com/o/oauth2/token" method="post" result="local.result" {
+		bx:httpparam type="header" name="Content-Type" value="application/x-www-form-urlencoded";
+		bx:httpparam type="body" value=postBody;
+	}
+
+	return local.result.fileContent.fromJSON();
+}
+
+public string function generateAuthURL(redirecturl, clientid, state, scope="https://www.googleapis.com/auth/userinfo.profile") {
+	/*
+	Scope is what you want to do with your access. Since this demo is ONLY for
+	auth and user info, we have one hard coded value.
+	*/
+	return "https://accounts.google.com/o/oauth2/auth?" & 
+			"client_id=#urlEncodedFormat(arguments.clientid)#" & 
+			"&redirect_uri=#urlEncodedFormat(arguments.redirecturl)#" & 
+			"&scope=#urlEncodedFormat(arguments.scope)#&response_type=code" & 
+			"&state=#urlEncodedFormat(arguments.state)#";
+
+}
+
+
+
+authurl = generateAuthUrl(callbackURL, application.googleAuth.clientId, session.jsessionid, "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar");
+
+</bx:script>
+
+<h1>Login Required</h1>
+
+<p>
+  In order to use this app, you must login with your Google account. Click to login below.
+</p>
+
+<bx:output>
+	<p>
+	<a href="#authurl#">LOGIN!</a>
+	</p>
+</bx:output>

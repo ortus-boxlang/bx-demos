@@ -1,0 +1,24 @@
+class {
+
+    this.name = "cfoauthdemo";
+	this.sessionManagement = true;
+
+	public function onRequestStart(page) {
+		if(url.keyExists("refresh")) {
+			applicationStop();
+			structClear(session);
+			bx:location url="./index.bxm" addToken=false;
+		}
+	}
+
+	public function onApplicationStart() {
+
+		application.googleAuth = {
+			clientId=getSystemSetting("clientId"),
+			clientSecret=getSystemSetting("clientSecret")
+		};
+
+		return true;
+	}
+
+}

@@ -1,0 +1,50 @@
+<bx:script>
+function getProfile(accesstoken) {
+
+	bx:http url="https://www.googleapis.com/oauth2/v1/userinfo" result="local.result" {
+		bx:httpparam type="header" name="Authorization" value="OAuth #arguments.accesstoken#";
+	}
+
+	return local.result.fileContent.fromJSON();
+}
+</bx:script>
+
+<h2>oauth Demo</h2>
+
+<bx:if not session.keyExists("auth")>
+
+	<p>
+	<a href="login.bxm">Login with Google</a>
+	</p>
+
+<bx:else>
+
+    <bx:dump var="#session#" expand="false">
+	<bx:set profile = getProfile(session.auth.access_token)>
+
+	<bx:output>
+	<p>
+	You are #profile.name#
+	</p>
+	</bx:output>
+
+    <bx:script>
+	function getEvents(accesstoken, data=[], page="") {
+
+		var theUrl = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
+		if(arguments.page != "") {
+			theUrl &= "&pageToken=#page#";
+		}
+		bx:http url="#theUrl#" result="local.result" {
+			bx:httpparam type="header" name="Authorization" value="OAuth #arguments.accesstoken#";
+		}
+
+		var result = result.fileContent.fromJSON().items;
+		return result;
+	}
+    </bx:script>
+
+    <h3>Events</h3>
+    <bx:dump var="#getEvents(session.auth.access_token)#" expand="false">
+
+</bx:if>
