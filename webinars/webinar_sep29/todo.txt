@@ -1,0 +1,9 @@
+finish recipe view
+recipe edit -> reuse, support loading existing value
+change getcookbook to return a struct by using get row
+ses rewriting
+
+UI 
+AI awesome URL-> clean recipe
+
+user management

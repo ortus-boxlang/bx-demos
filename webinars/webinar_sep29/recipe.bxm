@@ -1,0 +1,18 @@
+<bx:script>
+if(!url.keyExists("id")) {
+	bx:location url="/";
+}
+
+recipe = application.recipeService.getRecipe(url.id);
+</bx:script>
+
+<bx:component template="tags/layout.bxm" title="Recipe: #recipe.name#">
+
+	<bx:output>
+	<h2>#recipe.name#</h2>
+	</bx:output>
+
+	<bx:dump var="#recipe#">
+	
+</bx:component>
+

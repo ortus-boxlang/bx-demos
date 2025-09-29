@@ -1,0 +1,25 @@
+<bx:script>
+if(!url.keyExists("id")) {
+	bx:location url="/";
+}
+
+cookbook = application.recipeService.getCookbook(url.id);
+recipes = application.recipeService.getRecipesForCookbook(url.id);
+</bx:script>
+
+<bx:component template="tags/layout.bxm" title="Cookbook: #cookbook.name#">
+
+	<bx:output>
+	<h2>Cookbook: #cookbook.name#</h2>
+	</bx:output>
+
+	<ul>
+	<bx:output query="recipes">
+		<li><a href="recipe.bxm?id=#id#">#name#</a></li>
+	</bx:output>
+
+	</ul>
+
+
+</bx:component>
+

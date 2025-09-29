@@ -1,0 +1,68 @@
+class {
+
+	public function getCookbook(required string id) {
+		return queryExecute("select * from cookbooks where id = :id", {id: arguments.id});
+	}
+
+	public function getCookbooks() {
+		return queryExecute("select * from cookbooks order by name");
+	}
+
+	public function getRecipe(required string id) {
+		/*
+		figure out how to get a struct
+		convert ingredients + steps to real data
+		*/
+		var recipe = queryExecute("select * from recipes where id = :id", { id: arguments.id}).getRow(1);
+		recipe.ingredients = recipe.ingredients.fromJSON();
+		recipe.steps = recipe.steps.fromJSON();
+		return recipe;
+	}
+
+	public function getRecipesForCookbook(required string cbid) {
+		return queryExecute("select * from recipes where cookbookidfk = :cbid order by name", { cbid: arguments.cbid});
+	}
+
+	public function saveCookbook(required string name) {
+		queryExecute("insert into cookbooks(name) values(:name)", {name:arguments.name}, { result:"local.result" });
+		return result.generatedkey;
+	}
+
+	public function saveRecipe(required struct recipe) {
+		var result = { saved: false, errors: [] };
+
+		if(!recipe.keyExists("name") || recipe.name.len() === 0) {
+			result.errors.append("Recipe must include a name.");
+		}
+
+		// sanity ? time > 0, 
+		if(!recipe.keyExists("time") || recipe.time.len() === 0) {
+			result.errors.append("Recipe must include a time.");
+		}
+
+		// If newcookbook, create it, get the id 
+		if(recipe.keyExists("newcookbook") && recipe.newcookbook.len()) {
+			recipe.cookbook = saveCookbook(recipe.newcookbook);
+		}
+
+		queryExecute("
+			insert into recipes(name, totaltime, sourceurl, notes, ingredients, steps, cookbookidfk)
+			values(:name, :totaltime, :sourceurl, :notes, :ingredients, :steps, :cookbookidfk)", 
+			{
+				name: recipe.name,
+				totaltime: recipe.time, 
+				sourceurl: recipe.source, 
+				notes: recipe.notes, 
+				ingredients: recipe.ingredients.toJSON(), 
+				steps: recipe.steps.toJSON(), 
+				cookbookidfk: recipe.cookbook
+			}, { result:"local.insresult" }
+		);
+
+		result.saved = true;
+		result.recipeid = insresult.generatedkey;
+		return result;
+
+	}
+
+}

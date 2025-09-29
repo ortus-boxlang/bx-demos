@@ -1,0 +1,166 @@
+<bx:script>
+cookbooks = application.recipeService.getCookbooks();
+
+bx:param name="form.name" default="";
+bx:param name="form.time" default="";
+bx:param name="form.sourceurl" default="";
+bx:param name="form.cookbook" default="";
+bx:param name="form.newcookbook" default="";
+bx:param name="form.notes" default="";
+
+if(form.keyExists('save')) {
+	// we are saving so we need to validate
+	recipe = {};
+	recipe.name = form.name;
+	recipe.time = form.time;
+	recipe.source = form.sourceurl;
+	recipe.cookbook = form.cookbook;
+	recipe.newcookbook = form.newcookbook;
+	recipe.notes = form.notes;
+
+	/*
+	Ingredients:
+	list of:
+		form.qty_X
+		form.unit_x
+		form.ingredient_x
+	*/
+	recipe.ingredients = [];
+	for(i=1;i<=10;i++) {
+		if(
+			form.keyExists("qty_#i#") and form["qty_#i#"].len() && 
+			form.keyExists("unit_#i#") and form["unit_#i#"].len() && 
+			form.keyExists("ingredient_#i#") and form["ingredient_#i#"].len()) {
+			recipe.ingredients.append({
+				qty: form["qty_#i#"], 
+				unit: form["unit_#i#"], 
+				Ingredient: form["ingredient_#i#"]
+			});
+		} 
+	}
+
+	recipe.steps = [];
+	for(i=1;i<=10;i++) {
+		if(
+			form.keyExists("step_#i#") and form["step_#i#"].len()) {
+			recipe.steps.append(form["step_#i#"]);
+		} 
+	}
+
+	//writedump(recipe);
+	result = application.recipeService.saveRecipe(recipe);
+	if(result.saved) {
+		//locate the user back home
+	} else {
+		errors = result.errors;
+	}
+}
+</bx:script>
+
+<bx:component template="tags/layout.bxm" title="Recipe Edit">
+
+	<h2>Recipe Edit</h2>
+
+	<bx:if variables.keyExists("errors")>
+		<p>
+		<b>Please correct these errors:</b>
+		</p>
+		<bx:dump var="#errors#">
+	</bx:if>
+
+	<form method="post">
+		<bx:output>
+		<p>
+		<label for="name">
+		Name: 
+		</label>
+		<input type="text" id="name" name="name" required value="#form.name#">
+		</p>
+
+		<p>
+		<label for="time">
+		Total Time: 
+		</label>
+		<input type="number" id="time" name="time" required value="#form.time#">
+		</p>
+
+		<p>
+		<label for="sourceurl">
+		Source URL: 
+		</label>
+		<input type="url" id="sourceurl" name="sourceurl" value="#form.sourceurl#">
+		</p>
+		</bx:output>
+
+		<p>
+		<label for="cookbook">
+		Cookbook: 
+		</label>
+		<select id="cookbook" name="cookbook">
+			<bx:output query="cookbooks">
+				<option value=""></option>
+				<option value="#id#">#name#</option>
+			</bx:output>
+		</select>
+		<bx:output>
+		<input type="text" id="newcookbook" name="newcookbook" placeholder="New Cookbook" value="#form.newcookbook#">
+
+		</p>
+
+		<p>
+		<label for="ingredients">
+		Ingredients: 
+		</label>
+		<table>
+			<thead>
+				<tr>
+					<th>Qty</th>
+					<th>Measurement</th>
+					<th>Ingredient</th>
+				</tr>
+			</thead>
+			<tbody>
+			<bx:loop index="x" from="1" to="10">
+				<bx:param name="form.qty_#x#" default="">
+				<bx:param name="form.unit_#x#" default="">
+				<bx:param name="form.ingredient_#x#" default="">
+				<tr>
+					<td><input name="qty_#x#" value="#form['qty_#x#']#"></td>
+					<td><input name="unit_#x#" value="#form['unit_#x#']#"></td>
+					<td><input name="ingredient_#x#" value="#form['ingredient_#x#']#"></td>
+				</tr>
+			</bx:loop>
+			</tbody>
+		</table>
+		</p>
+
+		<p>
+		<label for="steps">
+		Steps:<br/> 
+		</label>
+		<bx:loop index="x" from="1" to="10">
+			<bx:param name="form.step_#x#" default="">
+			<input name="step_#x#" value="#form['step_#x#']#"><br>
+		</bx:loop>
+		</p>
+
+		<p>
+		<label for="notes">
+		Notes: 
+		</label>
+		<textarea id="notes" name="notes">#form.notes#</textarea>
+		</p>
+		</bx:output>
+
+		<p>
+		<input type="submit" name="save" value="Save Recipe">
+		</p>
+	</form>
+
+<!---
+ingredients
+steps
+notes
+--->
+
+</bx:component>

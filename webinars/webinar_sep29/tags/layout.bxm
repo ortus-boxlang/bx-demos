@@ -1,0 +1,21 @@
+<bx:param name="attributes.title" default="">
+
+<bx:if thisComponent.executionMode is "start">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<bx:output>
+	<title>#attributes.title#</title>
+	</bx:output>
+</head>
+<body>
+
+<bx:else>
+
+</body>
+</html>
+
+</bx:if>

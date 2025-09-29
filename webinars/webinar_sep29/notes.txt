@@ -1,0 +1,13 @@
+Outline:
+
+Introduce yourself
+What I want to do in this webinar is build an app, and see how far we can go. 
+Show mysaffronapp
+Talk about my version ->
+	whats missing featurewise
+	what we could add next time
+
+Tech Stack ->
+	BoxLang
+	MySQL
+	
