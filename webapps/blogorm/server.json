@@ -1,0 +1,13 @@
+{
+    "app":{
+        "cfengine":"boxlang@1.6.0+42"
+    },
+    "scripts":{
+        "onServerInitialInstall":"install bx-orm,bx-mysql"
+    },
+    "web":{
+        "http":{
+            "port":"43027"
+        }
+    }
+}
