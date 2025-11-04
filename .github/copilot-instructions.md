@@ -2,6 +2,40 @@
 
 This is a **BoxLang demonstration repository** showcasing the capabilities of BoxLang, a modern dynamic JVM language. Each directory contains self-contained examples demonstrating specific features.
 
+## Documentation Standards
+
+### Markdown Guidelines
+**ALWAYS resolve markdown linting errors** when creating or editing markdown files:
+
+- Surround headings with blank lines (before and after)
+- Surround lists with blank lines (before and after)
+- Surround code blocks with blank lines (before and after)
+- Use proper heading levels (don't skip levels)
+- Don't use emphasis (bold) as a heading substitute
+
+Example of proper formatting:
+
+```markdown
+## Section Title
+
+Some text here.
+
+### Subsection
+
+List items:
+
+- Item 1
+- Item 2
+
+More text.
+
+​```bash
+code here
+​```
+
+Next section text.
+```
+
 ## BoxLang Language Fundamentals
 
 ### File Extensions & Execution
