@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoxLang SSE Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 2rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .card {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: none;
+            border-radius: 15px;
+        }
+        .event-log {
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .event-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .event-complete {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .event-error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+        .status-badge {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+        }
+        #startBtn:disabled {
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">
+                            <i class="bi bi-broadcast"></i> BoxLang Server-Sent (SSE) Events Demo
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <button id="startBtn" class="btn btn-success btn-lg">
+                                    Start Streaming
+                                </button>
+                                <button id="stopBtn" class="btn btn-danger btn-lg" disabled>
+                                    Stop Streaming
+                                </button>
+                                <button id="clearBtn" class="btn btn-warning btn-lg">
+                                    Clear
+                                </button>
+                            </div>
+                            <div>
+                                <span id="statusBadge" class="badge bg-secondary status-badge">Ready</span>
+                            </div>
+                        </div>
+
+                        <div class="progress-container">
+                            <label class="form-label fw-bold">Progress:</label>
+                            <div class="progress" style="height: 30px;">
+                                <div id="progressBar"
+                                     class="progress-bar progress-bar-striped progress-bar-animated"
+                                     role="progressbar"
+                                     style="width: 0%"
+                                     aria-valuenow="0"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                    0%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="form-label fw-bold">Event Log:</label>
+                            <div id="eventLog" class="event-log border rounded p-2">
+                                <div class="text-muted text-center py-4">
+                                    Click "Start Streaming" to begin...
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                Events received: <strong id="eventCount">0</strong> |
+                                Last update: <strong id="lastUpdate">Never</strong>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SSEClient {
+            constructor() {
+                this.eventSource = null;
+                this.eventCount = 0;
+                this.startBtn = document.getElementById('startBtn');
+                this.stopBtn = document.getElementById('stopBtn');
+                this.clearBtn = document.getElementById('clearBtn');
+                this.eventLog = document.getElementById('eventLog');
+                this.progressBar = document.getElementById('progressBar');
+                this.statusBadge = document.getElementById('statusBadge');
+                this.eventCountDisplay = document.getElementById('eventCount');
+                this.lastUpdateDisplay = document.getElementById('lastUpdate');
+
+                this.initEventListeners();
+            }
+
+            initEventListeners() {
+                this.startBtn.addEventListener('click', () => this.start());
+                this.stopBtn.addEventListener('click', () => this.stop());
+                this.clearBtn.addEventListener('click', () => this.clear());
+            }
+
+            start() {
+                this.clearLog();
+                this.eventCount = 0;
+                this.updateEventCount();
+                this.resetProgress();
+
+                // Create EventSource connection to Data.bx
+                this.eventSource = new EventSource('Data.bx?method=getData');
+
+                // Update UI
+                this.startBtn.disabled = true;
+                this.stopBtn.disabled = false;
+                this.updateStatus('Connecting...', 'warning');
+
+                // Handle connection open
+                this.eventSource.addEventListener('open', () => {
+                    this.updateStatus('Connected', 'success');
+                    this.logEvent('Connection established', 'info');
+                });
+
+                // Listen for dataUpdate events
+                this.eventSource.addEventListener('dataUpdate', (e) => {
+                    const data = JSON.parse(e.data);
+                    this.eventCount++;
+                    this.updateEventCount();
+                    this.updateProgress(data.progress);
+                    this.logEvent(`Received: ${data.message} (Count: ${data.count})`, 'info', data);
+                    this.updateLastUpdate();
+                });
+
+                // Listen for complete event
+                this.eventSource.addEventListener('complete', (e) => {
+                    const data = JSON.parse(e.data);
+                    this.logEvent(data.message, 'success', data);
+                    this.updateStatus('Completed', 'success');
+                    this.stop();
+                });
+
+                // Listen for error event
+                this.eventSource.addEventListener('error', (e) => {
+                    if (e.data) {
+                        const data = JSON.parse(e.data);
+                        this.logEvent(`Error: ${data.error}`, 'error', data);
+                    } else {
+                        this.logEvent('Connection error or closed', 'error');
+                    }
+                    this.updateStatus('Error', 'danger');
+                    this.stop();
+                });
+            }
+
+            stop() {
+                if (this.eventSource) {
+                    this.eventSource.close();
+                    this.eventSource = null;
+                }
+                this.startBtn.disabled = false;
+                this.stopBtn.disabled = true;
+
+                if (this.eventCount > 0) {
+                    this.updateStatus('Stopped', 'secondary');
+                } else {
+                    this.updateStatus('Ready', 'secondary');
+                }
+            }
+
+            clear() {
+                // Stop any active connection
+                if (this.eventSource) {
+                    this.eventSource.close();
+                    this.eventSource = null;
+                }
+
+                // Reset all UI elements
+                this.clearLog();
+                this.eventCount = 0;
+                this.updateEventCount();
+                this.resetProgress();
+                this.updateStatus('Ready', 'secondary');
+                this.lastUpdateDisplay.textContent = 'Never';
+
+                // Reset buttons
+                this.startBtn.disabled = false;
+                this.stopBtn.disabled = true;
+
+                // Show initial message
+                this.eventLog.innerHTML = '<div class="text-muted text-center py-4">Click "Start Streaming" to begin...</div>';
+            }
+
+            clearLog() {
+                this.eventLog.innerHTML = '';
+            }
+
+            logEvent(message, type = 'info', data = null) {
+                const eventItem = document.createElement('div');
+                eventItem.className = `event-item ${type === 'success' ? 'event-complete' : ''} ${type === 'error' ? 'event-error' : ''}`;
+
+                const timestamp = new Date().toLocaleTimeString();
+                let content = `<strong>[${timestamp}]</strong> ${message}`;
+
+                if (data) {
+                    content += `<br><small class="text-muted">${JSON.stringify(data)}</small>`;
+                }
+
+                eventItem.innerHTML = content;
+                this.eventLog.appendChild(eventItem);
+
+                // Auto-scroll to bottom
+                this.eventLog.scrollTop = this.eventLog.scrollHeight;
+            }
+
+            updateProgress(percent) {
+                const rounded = Math.round(percent);
+                this.progressBar.style.width = `${rounded}%`;
+                this.progressBar.setAttribute('aria-valuenow', rounded);
+                this.progressBar.textContent = `${rounded}%`;
+            }
+
+            resetProgress() {
+                this.updateProgress(0);
+            }
+
+            updateStatus(text, type) {
+                this.statusBadge.textContent = text;
+                this.statusBadge.className = `badge bg-${type} status-badge`;
+            }
+
+            updateEventCount() {
+                this.eventCountDisplay.textContent = this.eventCount;
+            }
+
+            updateLastUpdate() {
+                this.lastUpdateDisplay.textContent = new Date().toLocaleTimeString();
+            }
+        }
+
+        // Initialize the SSE client when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SSEClient();
+        });
+    </script>
+</body>
+</html>
