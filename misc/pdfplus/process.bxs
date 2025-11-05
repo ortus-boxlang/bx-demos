@@ -1,0 +1,27 @@
+source = "./source_pdfs";
+dest = expandPath("./samples");
+
+pdfs = directoryList(path="./source_pdfs", filter="*.pdf");
+
+pdfs.each(p => {
+    if(!fileExists(dest & "/" & getFileFromPath(p))) {
+        println("Need to process #p#");
+        bx:pdf action="getinfo" source="#p#" name="info";
+        // if > 5, kill the rest
+        if(info.TotalPages > 5) {  
+            bx:pdf action="deletepages" source="#p#" pages="5-#info.TotalPages#" destination="#dest#/#getFileFromPath(p)#" overwrite=true;
+        } else {
+            copyFile(p, dest & "/" & getFileFromPath(p));
+        }
+        // make the thumb
+        bx:pdf action="thumbnail" pages="1" source="#p#" overwrite=true directory=expandPath("./samples_thumbs");
+
+        myThumbPath = expandPath("./samples_thumbs") & "/" & replace(getFileFromPath(p), ".pdf", "_page_1.jpg");
+        img = imageRead(myThumbPath);
+        // FYI, two reported bugs here. height should be optional, and path 
+        img.scaleToFit(250, 250);
+        img.write(myThumbPath);
+    }
+
+}, true);
+
