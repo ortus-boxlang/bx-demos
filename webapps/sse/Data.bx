@@ -1,0 +1,67 @@
+class {
+
+    remote function getData() {
+        println( "Client connected for SSE streaming" );
+        // Use the SSE BIF to stream data to the client
+        sse(
+            callback = ( emit ) => {
+                try {
+                    // Send 10 events with incrementing data
+                    for ( var i = 1; i <= 10; i++ ) {
+                        // Check if client disconnected
+                        if ( emit.isClosed() ) {
+                            break;
+                        }
+
+                        // Send structured data as JSON
+                        emit.send(
+                            {
+                                "count": i,
+                                "timestamp": now().getTime(),
+                                "message": "Event ##" & i,
+                                "progress": (i / 10) * 100
+                            },
+                            "dataUpdate",
+                            i
+                        );
+                        println( "Sent event ##" & i );
+
+                        // Wait 1 second between events
+                        sleep( 1000 );
+                    }
+
+                    // Send completion event
+                    emit.send(
+                        {
+                            "status": "complete",
+                            "message": "All events sent successfully"
+                        },
+                        "complete",
+                        createUUID()
+                    );
+
+                    println( "Sent completion event" );
+
+                    // Close the connection
+                    emit.close();
+                } catch (any e) {
+                    // Send error event if something goes wrong
+                    emit.send(
+                        {
+                            "error": e.message,
+                            "status": "error"
+                        },
+                        "error",
+                        createUUID()
+                    );
+                    println( "Sent error event" );
+                    emit.close();
+                }
+            },
+            retry = 3000,
+            keepAliveInterval = 15000,
+            cors = "*"
+        );
+    }
+
+}
